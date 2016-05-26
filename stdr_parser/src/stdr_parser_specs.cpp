@@ -49,6 +49,11 @@ namespace stdr_parser
 
   bool Specs::operator== (const Specs& rhs) const
   {
-    return true; //there are actual member comparisons here
+    return specs == rhs.specs && non_mergable_tags == rhs.non_mergable_tags;
+  }
+
+  bool ElSpecs::operator== (const ElSpecs& rhs) const
+  {
+    return required == rhs.required && allowed == rhs.allowed && default_value == rhs.default_value;
   }
 }

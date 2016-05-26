@@ -534,4 +534,22 @@ TEST_F(ValidatorTest,clearSpecsIsEmpty)
   EXPECT_EQ(specs,returned);
 }
 
+TEST_F(ValidatorTest, equalitySpecs)
+{
+  Specs specs_1;
+  std::string tmp[] = {"robot", "laser", "sonar"};
+  std::set<std::string> tmp_set(tmp, tmp + sizeof(tmp) / sizeof(tmp[0]));
+  specs_1.non_mergable_tags = tmp_set;
+  ElSpecs elspecs;
+  std::string tmp_2[] = {"map", "robot", "rfid_tag"};
+  elspecs.allowed.insert(tmp_2, tmp_2 + sizeof(tmp_2) / sizeof(tmp_2[0]));
+  std::string tmp_3[] = {"map"};
+  elspecs.required.insert(tmp_3, tmp_3 + sizeof(tmp_3) / sizeof(tmp_3[0]));
+  std::map<std::string,ElSpecs> specs;
+  specs.insert ( std::pair<std::string,ElSpecs>("environment",elspecs) );
+  specs_1.specs = specs;
+  Specs specs_2 = specs_1;
+  EXPECT_EQ(true, specs_1 == specs_2);
+}
+
 }  // namespace stdr_parser

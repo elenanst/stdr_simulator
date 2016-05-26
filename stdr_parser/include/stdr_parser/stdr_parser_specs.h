@@ -41,7 +41,7 @@ namespace stdr_parser
     @return void
     **/
     ElSpecs(void);
-    
+    bool operator== (const ElSpecs& rhs) const;
     //!< The required tags for the tag
     std::set<std::string> required;
     //!< The allowed tags for the tag
@@ -67,7 +67,7 @@ namespace stdr_parser
     @return bool True if equal Specs
     **/
     bool operator== (const Specs& rhs) const;
-
+    
     
     //!< std::map of valid STDR tags
     static std::map<std::string,ElSpecs> specs;
