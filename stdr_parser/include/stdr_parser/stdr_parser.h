@@ -121,6 +121,8 @@ namespace stdr_parser
           YamlFileWriter::messageToFile(msg,file_name); 
         }
       }
+    private:
+      friend class ParserTest;
 
   };
 }

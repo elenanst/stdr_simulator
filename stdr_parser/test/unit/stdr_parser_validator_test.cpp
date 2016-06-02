@@ -549,7 +549,7 @@ TEST_F(ValidatorTest, equalitySpecs)
   specs.insert ( std::pair<std::string,ElSpecs>("environment",elspecs) );
   specs_1.specs = specs;
   Specs specs_2 = specs_1;
-  EXPECT_EQ(true, specs_1 == specs_2);
+  EXPECT_TRUE(specs_1 == specs_2);
 }
 
 }  // namespace stdr_parser
