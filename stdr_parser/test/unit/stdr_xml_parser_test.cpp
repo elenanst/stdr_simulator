@@ -19,7 +19,7 @@
 
 #include <gtest/gtest.h>
 #include "stdr_parser/stdr_xml_parser.h"
-
+#include <fstream> 
 namespace stdr_parser
 {
 
@@ -34,9 +34,18 @@ class XmlParserTest : public ::testing::Test
   {
   }
 
+  void SetUp()
+  { 
+    std::string dump_file_ = ros::package::getPath("stdr_parser") +
+                    "/test/files/dump_file.txt"; 
+   
+ 
+  }
   virtual void TearDown()
   {
     delete root_node_;
+    remove(dump_file_.c_str());
+    
   }
 
   void init(const std::string& filename)
@@ -44,31 +53,35 @@ class XmlParserTest : public ::testing::Test
     robot_file_ = ros::package::getPath("stdr_parser") +
                     filename;
 
-    root_node_ = new Node();
+    root_node_ = new Node();  //auta na pane sto setup?
     root_node_->tag = "STDR_Parser_Root_Node";
   }
 
+  std::string readFile(const std::string& filename)
+  {
+      std::string file = ros::package::getPath("stdr_parser") +
+                    filename;
+      std::ifstream t(file.c_str());
+      std::string str;
+      t.seekg(0, std::ios::end);   
+      str.reserve(t.tellg());
+      t.seekg(0, std::ios::beg);
+      str.assign((std::istreambuf_iterator<char>(t)),
+            std::istreambuf_iterator<char>());
+      return str;
+
+  }
   // Accessors for private methods of XmlParser
   void parseLow(TiXmlNode* node, Node* n)
   {
     XmlParser::parseLow(node, n);
   }
   
-  //checks if two trees of Nodes are equal 
-  void checkTree(Node* n1, Node* n2)
-  {
-    EXPECT_STREQ((n1)->tag.c_str(), (n2)->tag.c_str());
-    EXPECT_STREQ((n1)->value.c_str(), (n2)->value.c_str());
-    ASSERT_EQ(n1->elements.size(), n2->elements.size());
-    for(std::vector<Node*>::iterator it1=(n1)->elements.begin(), it2=(n2)->elements.begin(); it1 != (n1)->elements.end(), it2!=(n2)->elements.end(); ++it1, ++it2)
-    {
-      checkTree(*it1,*it2);
-    }
-  }
 
   // Variables
   Node* root_node_;
   std::string robot_file_;
+  std::string dump_file_;
 
 };
 
@@ -108,143 +121,15 @@ TEST_F(XmlParserTest, parseLow)
     root_node_->file_origin = robot_file_;
     root_node_->file_row = doc.Row();
     parseLow(&doc,root_node_);
-    //declare and fill the tree corresponding to file test_robot_1.xml
-    Node* test_node_=new Node();
-    std::vector<Node*> child_node(77);
-    for (unsigned i=0; i<child_node.size(); i++)
-    {
-      child_node.at(i)=new Node();
-    }
-    std::vector<Node*> test_children;
-    child_node.at(0)->tag="STDR_Parser_Root_Node";
-    child_node.at(1)->tag="robot";
-    child_node.at(0)->elements.push_back(child_node.at(1));
-    child_node.at(2)->tag = "filename";
-    child_node.at(3)->tag = "robot_specifications";
-    child_node.at(1)->elements.push_back(child_node.at(2));
-    child_node.at(1)->elements.push_back(child_node.at(3));
-    child_node.at(4)->tag = "footprint";
-    child_node.at(5)->tag = "initial_pose";
-    child_node.at(6)->tag = "laser";
-    child_node.at(3)->elements.push_back(child_node.at(4));
-    child_node.at(3)->elements.push_back(child_node.at(5));
-    child_node.at(3)->elements.push_back(child_node.at(6));
-    child_node.at(7)->tag = "footprint_specifications";
-    child_node.at(4)->elements.push_back(child_node.at(7));
-    child_node.at(8)->tag = "radius";
-    child_node.at(57)->value="0.05";
-    child_node.at(8)->elements.push_back(child_node.at(57));
-    child_node.at(7)->elements.push_back(child_node.at(8));
-    child_node.at(9)->tag = "x";
-    child_node.at(37)->value = "3";
-    child_node.at(9)->elements.push_back(child_node.at(37));
-    child_node.at(10)->tag = "y";
-    child_node.at(38)->value = "2";
-    child_node.at(10)->elements.push_back(child_node.at(38));
-    child_node.at(11)->tag = "theta";
-    child_node.at(39)->value = "1.57";
-    child_node.at(11)->elements.push_back(child_node.at(39));
-    child_node.at(5)->elements.push_back(child_node.at(9));
-    child_node.at(5)->elements.push_back(child_node.at(10));
-    child_node.at(5)->elements.push_back(child_node.at(11));
-    child_node.at(12)->tag = "filename";
-    child_node.at(13)->tag = "laser_specifications";
-    child_node.at(6)->elements.push_back(child_node.at(12));
-    child_node.at(6)->elements.push_back(child_node.at(13));
-    child_node.at(14)->tag = "pose";
-    child_node.at(13)->elements.push_back(child_node.at(14));
-    child_node.at(15)->tag = "theta";
-    child_node.at(40)->value = "-3.1415";
-    child_node.at(15)->elements.push_back(child_node.at(40));
-    child_node.at(14)->elements.push_back(child_node.at(15));
-    child_node.at(16)->tag = "robot";
-    child_node.at(2)->elements.push_back(child_node.at(16));
-    child_node.at(17)->tag = "robot_specifications";
-    child_node.at(16)->elements.push_back(child_node.at(17));
-    child_node.at(18)->tag = "initial_pose";
-    child_node.at(17)->elements.push_back(child_node.at(18));
-    child_node.at(19)->tag = "x";
-    child_node.at(41)->value = "0";
-    child_node.at(19)->elements.push_back(child_node.at(41));
-    child_node.at(20)->tag = "y";
-    child_node.at(42)->value = "0";
-    child_node.at(20)->elements.push_back(child_node.at(42));
-    child_node.at(21)->tag = "theta";
-    child_node.at(43)->value = "0";
-    child_node.at(21)->elements.push_back(child_node.at(43));
-    child_node.at(18)->elements.push_back(child_node.at(19));
-    child_node.at(18)->elements.push_back(child_node.at(20));
-    child_node.at(18)->elements.push_back(child_node.at(21));
-    child_node.at(22)->tag = "laser";
-    child_node.at(12)->elements.push_back(child_node.at(22));
-    child_node.at(23)->tag = "laser_specifications";
-    child_node.at(22)->elements.push_back(child_node.at(23));
-    child_node.at(24)->tag = "max_angle";
-    child_node.at(44)->value = "2.09439510239";
-    child_node.at(24)->elements.push_back(child_node.at(44));
-    child_node.at(25)->tag = "min_angle";
-    child_node.at(45)->value = "-2.09439510239";
-    child_node.at(25)->elements.push_back(child_node.at(45));
-    child_node.at(26)->tag = "max_range";
-    child_node.at(46)->value = "4.09";
-    child_node.at(26)->elements.push_back(child_node.at(46));
-    child_node.at(27)->tag = "min_range";
-    child_node.at(47)->value = "0.06";
-    child_node.at(27)->elements.push_back(child_node.at(47));
-    child_node.at(28)->tag = "num_rays";
-    child_node.at(48)->value = "667";
-    child_node.at(28)->elements.push_back(child_node.at(48));
-    child_node.at(29)->tag = "frequency";
-    child_node.at(49)->value = "10";
-    child_node.at(29)->elements.push_back(child_node.at(49));
-    child_node.at(23)->elements.push_back(child_node.at(24));
-    child_node.at(23)->elements.push_back(child_node.at(25));
-    child_node.at(23)->elements.push_back(child_node.at(26));
-    child_node.at(23)->elements.push_back(child_node.at(27));
-    child_node.at(23)->elements.push_back(child_node.at(28));
-    child_node.at(23)->elements.push_back(child_node.at(29));
-    child_node.at(59)->tag = "pose";
-    child_node.at(23)->elements.push_back(child_node.at(59));
-    child_node.at(65)->tag = "x";
-    child_node.at(50)->value = "0";
-    child_node.at(65)->elements.push_back(child_node.at(50));
-    child_node.at(66)->tag = "y";
-    child_node.at(51)->value = "0";
-    child_node.at(66)->elements.push_back(child_node.at(51));
-    child_node.at(67)->tag = "theta";
-    child_node.at(52)->value = "0";
-    child_node.at(67)->elements.push_back(child_node.at(52));
-    child_node.at(59)->elements.push_back(child_node.at(65));
-    child_node.at(59)->elements.push_back(child_node.at(66));
-    child_node.at(59)->elements.push_back(child_node.at(67));
-    child_node.at(68)->tag = "noise";
-    child_node.at(23)->elements.push_back(child_node.at(68));
-    child_node.at(69)->tag = "filename";
-    child_node.at(68)->elements.push_back(child_node.at(69));
-    child_node.at(70)->tag = "noise_specifications";
-    child_node.at(68)->elements.push_back(child_node.at(70));
-    child_node.at(71)->tag = "noise_mean";
-    child_node.at(53)->value = "0.5";
-    child_node.at(71)->elements.push_back(child_node.at(53));
-    child_node.at(72)->tag = "noise_std";
-    child_node.at(54)->value = "0.05";
-    child_node.at(72)->elements.push_back(child_node.at(54));
-    child_node.at(70)->elements.push_back(child_node.at(71));
-    child_node.at(70)->elements.push_back(child_node.at(72));
-    child_node.at(73)->tag = "noise";
-    child_node.at(69)->elements.push_back(child_node.at(73));
-    child_node.at(74)->tag = "noise_specifications";
-    child_node.at(73)->elements.push_back(child_node.at(74));
-    child_node.at(75)->tag = "noise_mean";
-    child_node.at(55)->value = "0.1";
-    child_node.at(75)->elements.push_back(child_node.at(55));
-    child_node.at(76)->tag = "noise_std";
-    child_node.at(56)->value = "0.01";
-    child_node.at(76)->elements.push_back(child_node.at(56));
-    child_node.at(74)->elements.push_back(child_node.at(75));
-    child_node.at(74)->elements.push_back(child_node.at(76));
-    checkTree(child_node.at(0), root_node_);
-  
+    std::string indent="";
+    std::ostringstream output_stream;
+    std::string tree = root_node_->printParsedXml(root_node_, indent);
+    ROS_INFO(tree.c_str());
+    std::string expected_tree = readFile(std::string("/test/files/test_robot_1_tree.txt"));
+    ROS_INFO(expected_tree.c_str());
+    EXPECT_STREQ(tree.c_str(), expected_tree.c_str());
+    
+
 }
 
 

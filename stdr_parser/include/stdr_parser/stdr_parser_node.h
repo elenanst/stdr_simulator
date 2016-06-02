@@ -23,7 +23,7 @@
 #define STDR_PARSER_NODE
 
 #include "stdr_parser/stdr_parser_specs.h"
-
+#include <fstream>
 /**
 @namespace stdr_parser
 @brief The main namespace for STDR parser
@@ -100,7 +100,7 @@ namespace stdr_parser
       @param indent [std::string] The indentation for the specific node
       @return void
       **/
-      void printParsedXml(Node *n,std::string indent);
+      std::string printParsedXml(Node *n,std::string indent);
 
   };
   
