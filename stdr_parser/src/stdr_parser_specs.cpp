@@ -56,4 +56,23 @@ namespace stdr_parser
   {
     return required == rhs.required && allowed == rhs.allowed && default_value == rhs.default_value;
   }
+  
+  std::ostream &operator<<(std::ostream &output, const ElSpecs &elspecs)
+  {
+    std::set<std::string> required_tags = elspecs.required;
+    for(std::set<std::string>::const_iterator it = required_tags.begin();
+    it != required_tags.end(); ++it)
+    {
+      output << *it;
+         
+    }
+    std::set<std::string> allowed_tags = elspecs.allowed;
+    for(std::set<std::string>::const_iterator it = allowed_tags.begin();
+    it != allowed_tags.end(); ++it)
+    {
+       output << *it;   
+    }
+    output << elspecs.default_value;
+    return output;   
+  }
 }

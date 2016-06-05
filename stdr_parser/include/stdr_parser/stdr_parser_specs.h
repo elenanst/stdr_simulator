@@ -42,6 +42,9 @@ namespace stdr_parser
     **/
     ElSpecs(void);
     bool operator== (const ElSpecs& rhs) const;
+    
+    friend std::ostream &operator<<(std::ostream &output, 
+                                       const ElSpecs &elspecs );
     //!< The required tags for the tag
     std::set<std::string> required;
     //!< The allowed tags for the tag

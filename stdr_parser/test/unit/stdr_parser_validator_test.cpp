@@ -14,7 +14,7 @@
    Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
 
    Authors :
-   * Christos Zalidis, zalidis@gmail.com
+   * Eleni Nisioti, elennisioti@gmail.com
 ******************************************************************************/
 
 #include <gtest/gtest.h>
@@ -25,6 +25,8 @@
 #include "stdr_parser/stdr_parser_node.h"
 #include <typeinfo>
 #include <vector>
+
+
 namespace stdr_parser
 {
 
@@ -51,6 +53,36 @@ class ValidatorTest : public ::testing::Test
                     filename;
   }
    
+  std::string readFile(const std::string& filename)
+  {
+      std::string file = ros::package::getPath("stdr_parser") +
+                    filename;
+     std::ifstream ifs(file.c_str());
+     std::string content( (std::istreambuf_iterator<char>(ifs) ),
+                       (std::istreambuf_iterator<char>()    ) );
+     content.erase(std::remove(content.begin(), content.end(), '\n'), content.end());
+     ROS_INFO("%s", content.c_str());
+     return content;
+ }
+
+  std::string mapToString(const std::map<std::string,ElSpecs>& specs_map)
+  {
+    std::ostringstream output_stream;
+    std::string output ;
+    for(std::map<std::string,ElSpecs>::const_iterator it = specs_map.begin();
+    it != specs_map.end(); ++it)
+    {
+      std::string name = it->first;
+      ElSpecs elspecs = it->second;
+      output_stream << name  << elspecs;
+
+    }
+
+    return output_stream.str().c_str();
+
+  }
+
+
   // Accessors for private methods of XmlParser
   std::map<std::string,ElSpecs> parseSpecifications(TiXmlNode* node)
   {
@@ -126,246 +158,9 @@ TEST_F(ValidatorTest,parseSpecificationsTestThrow)
 
 TEST_F(ValidatorTest,parseSpecificationsRightSpecs)
 {
-  Validator::clearSpecs();
-  //fill map specifications as defined in stdr_specifications.xml
+   Validator::clearSpecs();
   init(std::string("/test/files/stdr_specifications.xml"));
-  char* tags_array[] = {"environment", "map", "map_specifications","origin","robot","robot_specifications",
-  "initial_pose","pose","footprint","footprint_specifications","points","point","laser","laser_specifications"
-  ,"noise","noise_specifications","sonar","sonar_specifications","rfid_reader",
-  "rfid_reader_specifications","co2_sensor","co2_sensor_specifications",
-  "thermal_sensor","thermal_sensor_specifications","sound_sensor","sound_sensor_specifications",
-  "kinematic","kinematic_specifications","kinematic_parameters","rfid_tag","x","y","theta"
-  ,"max_angle","min_angle","max_range","min_range","num_rays","frequency","frame_id",
-  "noise_mean","noise_std","angle_span","signal_cutoff","radius","cone_angle",
-  "kinematic_model","a_ux_ux","a_ux_uy","a_ux_w","a_uy_ux","a_uy_uy",
-  "a_uy_w","a_w_ux","a_w_uy","a_w_w","a_g_ux","a_g_uy","a_g_w"
-  };
- 
-  std::vector<std::string> tags(tags_array, tags_array + 60);
-  std::map<std::string,ElSpecs> specifications;
-  for(std::vector<std::string>::const_iterator it_tags = tags.begin(); it_tags != tags.end(); ++it_tags)
-  {
-    ElSpecs elspecs_test;
-    elspecs_test.default_value=""; 
-    std::vector<std::string> tmp_allowed_vect;
-    std::vector<std::string> tmp_required_vect;
-    if(*it_tags=="environment")
-    {
-      std::string tmp_allowed_array[] = {"map", "robot", "rfid_tag"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 3 ) ; 
-      std::string tmp_required_array[] = {"map"};
-      tmp_required_vect.insert(tmp_required_vect.begin() , tmp_required_array , tmp_required_array + 1 ) ;
-      
-    }
-    if(*it_tags=="map")
-    {
-      std::string tmp_allowed_array[] = {"filename","map_specifications"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 2 ) ; 
-      std::string tmp_required_array[] = {"map_specifications"};
-      tmp_required_vect.insert(tmp_required_vect.begin() , tmp_required_array , tmp_required_array + 1 ) ;
-    }
-    if(*it_tags=="map_specifications")
-    {
-      std::string tmp_allowed_array[] = {"image","resolution","origin","free_thresh","negate","occupied_thresh"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 6 ) ; 
-      std::string tmp_required_array[] = {"image","resolution"};
-      tmp_required_vect.insert(tmp_required_vect.begin() , tmp_required_array , tmp_required_array + 2 ) ;
-    }
-    if(*it_tags=="robot")
-    {
-      std::string tmp_allowed_array[] = {"filename","robot_specifications"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 2 ) ; 
-      std::string tmp_required_array[] = {"robot_specifications"};
-      tmp_required_vect.insert(tmp_required_vect.begin() , tmp_required_array , tmp_required_array + 1 ) ;
-    }
-    if(*it_tags=="robot_specifications")
-    {
-      std::string tmp_allowed_array[] = {"initial_pose","footprint","laser","sonar","rfid_reader","kinematic"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 6 ) ; 
-    }
-    if(*it_tags=="initial_pose" || *it_tags=="pose" || *it_tags=="origin")
-    {
-      std::string tmp_allowed_array[] = {"x","y","theta"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 3 ) ; 
-    }
-    if(*it_tags=="footprint")
-    {
-      std::string tmp_allowed_array[] = {"filename","footprint_specifications"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 2 ) ; 
-      std::string tmp_required_array[] = {"footprint_specifications"};
-      tmp_required_vect.insert(tmp_required_vect.begin() , tmp_required_array , tmp_required_array + 1 ) ;
-    }
-    if(*it_tags=="footprint_specifications")
-    {
-      std::string tmp_allowed_array[] = {"radius","points"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 2 ) ; 
-    }
-    if(*it_tags=="points")
-    {
-      std::string tmp_allowed_array[] = {"point"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 1 ) ; 
-    }
-    if(*it_tags=="point")
-    {
-      std::string tmp_allowed_array[] = {"x","y"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 2 ) ; 
-      std::string tmp_required_array[] = {"x","y"};
-      tmp_required_vect.insert(tmp_required_vect.begin() , tmp_required_array , tmp_required_array + 2 ) ;
-    }
-    if(*it_tags=="laser")
-    {
-      std::string tmp_allowed_array[] = {"filename","laser_specifications"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 2 ) ; 
-      std::string tmp_required_array[] = {"laser_specifications"};
-      tmp_required_vect.insert(tmp_required_vect.begin() , tmp_required_array , tmp_required_array + 1 ) ;
-    }
-    if(*it_tags=="laser_specifications")
-    {
-      std::string tmp_allowed_array[] = {"max_angle","min_angle","max_range","min_range","num_rays","frequency","frame_id","pose","noise"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 9 ) ; 
-    }
-    if(*it_tags=="noise")
-    {
-      std::string tmp_allowed_array[] = {"filename","noise_specifications"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 2 ) ; 
-      std::string tmp_required_array[] = {"noise_specifications"};
-      tmp_required_vect.insert(tmp_required_vect.begin() , tmp_required_array , tmp_required_array + 1 ) ;
-    }
-    if(*it_tags=="noise_specifications")
-    {
-      std::string tmp_allowed_array[] = {"noise_mean","noise_std"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 2 ) ; 
-    }
-    if(*it_tags=="sonar")
-    {
-      std::string tmp_allowed_array[] = {"filename","sonar_specifications"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 2 ) ; 
-      std::string tmp_required_array[] = {"sonar_specifications"};
-      tmp_required_vect.insert(tmp_required_vect.begin() , tmp_required_array , tmp_required_array + 1 ) ;
-    }
-    if(*it_tags=="sonar_specifications")
-    {
-      std::string tmp_allowed_array[] = {"cone_angle","max_range","min_range","frequency","frame_id","pose","noise"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 7 ) ; 
-    }
-    if(*it_tags=="co2_sensor")
-    {
-      std::string tmp_allowed_array[] = {"filename","co2_sensor_specifications"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 2 ) ; 
-      std::string tmp_required_array[] = {"co2_sensor_specifications"};
-      tmp_required_vect.insert(tmp_required_vect.begin() , tmp_required_array , tmp_required_array + 1 ) ;
-    }
-    if(*it_tags=="co2_sensor_specifications")
-    {
-      std::string tmp_allowed_array[] = {"max_range","frequency","frame_id","pose"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 4 ) ; 
-    }
-    if(*it_tags=="thermal_sensor")
-    {
-      std::string tmp_allowed_array[] = {"filename","thermal_sensor_specifications"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 2 ) ; 
-      std::string tmp_required_array[] = {"thermal_sensor_specifications"};
-      tmp_required_vect.insert(tmp_required_vect.begin() , tmp_required_array , tmp_required_array + 1 ) ;
-    }
-    if(*it_tags=="thermal_sensor_specifications" || *it_tags=="sound_sensor_specifications")
-    {
-      std::string tmp_allowed_array[] = {"max_range","angle_span","frequency","frame_id","pose"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 5 ) ; 
-    }
-    if(*it_tags=="sound_sensor")
-    {
-      std::string tmp_allowed_array[] = {"filename","sound_sensor_specifications"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 2 ) ; 
-      std::string tmp_required_array[] = {"sound_sensor_specifications"};
-      tmp_required_vect.insert(tmp_required_vect.begin() , tmp_required_array , tmp_required_array + 1 ) ;
-    }
-    if(*it_tags=="kinematic")
-    {
-      std::string tmp_allowed_array[] = {"filename","kinematic_specifications"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 2 ) ; 
-      std::string tmp_required_array[] = {"kinematic_specifications"};
-      tmp_required_vect.insert(tmp_required_vect.begin() , tmp_required_array , tmp_required_array + 1 ) ;
-    }
-    if(*it_tags=="kinematic_specifications")
-    {
-     std::string tmp_allowed_array[] = {"kinematic_model","kinematic_parameters"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 2 ) ; 
-      std::string tmp_required_array[] = {"kinematic_model"};
-      tmp_required_vect.insert(tmp_required_vect.begin() , tmp_required_array , tmp_required_array + 1 ) ; 
-   
-    }
-    if(*it_tags=="kinematic_parameters")
-    {
-      std::string tmp_allowed_array[] =   {"a_ux_ux","a_ux_uy","a_ux_w","a_uy_ux","a_uy_uy","a_uy_w","a_w_ux","a_w_uy","a_w_w","a_g_ux","a_g_uy","a_g_w"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 12 ) ; 
-      std::string tmp_required_array[] = {"a_ux_ux","a_ux_uy","a_ux_w","a_uy_ux","a_uy_uy","a_uy_w","a_w_ux","a_w_uy","a_w_w","a_g_ux","a_g_uy","a_g_w"};
-      tmp_required_vect.insert(tmp_required_vect.begin() , tmp_required_array , tmp_required_array + 12 ) ;
-    }
-    if(*it_tags=="rfid_tag")
-    {
-      std::string tmp_allowed_array[] = {"x","y","message"};
-      tmp_allowed_vect.insert(tmp_allowed_vect.begin() , tmp_allowed_array , tmp_allowed_array + 3 ) ; 
-      std::string tmp_required_array[] = {"x","y"};
-      tmp_required_vect.insert(tmp_required_vect.begin() , tmp_required_array , tmp_required_array + 2 ) ;
-    }
-    if(*it_tags=="x" || *it_tags=="y" || *it_tags=="theta" || *it_tags=="min_range" || *it_tags=="noise_mean" || *it_tags=="noise_std"  || *it_tags=="a_ux_ux" || *it_tags=="a_ux_uy" || *it_tags=="a_ux_w" || *it_tags=="a_uy_ux" || *it_tags=="a_uy_uy" || *it_tags=="a_uy_w" || *it_tags=="a_w_ux" || *it_tags=="a_w_uy" || *it_tags=="a_w_w" || *it_tags=="a_g_ux" || *it_tags=="a_g_uy" || *it_tags=="a_g_w")
-    {
-       elspecs_test.default_value="0";
-    }
-    if (*it_tags=="signal_cutoff")
-    {
-      elspecs_test.default_value = "0.0";
-     }
-    if(*it_tags=="max_angle")
-    {
-       elspecs_test.default_value = "1.57";
-    }
-     if(*it_tags=="min_angle")
-    {
-       elspecs_test.default_value = "-1.57";
-    }
-    if(*it_tags=="max_range")
-    {
-       elspecs_test.default_value = "4";
-    }
-    if(*it_tags=="num_rays")
-    {
-       elspecs_test.default_value = "180";
-    }
-    if(*it_tags=="frequency")
-    {
-       elspecs_test.default_value = "10";
-    }
-    if(*it_tags=="angle_span")
-    {
-       elspecs_test.default_value = "360.0";
-    }
-    if(*it_tags=="radius")
-    {
-       elspecs_test.default_value = "0.3";
-    }
-    if(*it_tags=="cone_angle")
-    {
-       elspecs_test.default_value = "1.0";
-    }
-    if(*it_tags=="kinematic_model")
-    {
-       elspecs_test.default_value = "ideal";
-    }
-   
-    for(std::vector<std::string>::const_iterator it_allowed = tmp_allowed_vect.begin(); it_allowed != tmp_allowed_vect.end(); ++it_allowed)
-    {
-      elspecs_test.allowed.insert(*it_allowed);
-    }
-    for(std::vector<std::string>::const_iterator it_required = tmp_required_vect.begin(); it_required != tmp_required_vect.end(); ++it_required)
-    {
-     
-      elspecs_test.required.insert(*it_required);
-    }
-    specifications.insert(std::pair<std::string,ElSpecs>(*it_tags,elspecs_test));
-   
-  }
-  std::string path=extractDirname(specs_file_);
+  std::string path = extractDirname(specs_file_);
   TiXmlDocument test_doc;
   bool loadOkay = test_doc.LoadFile(specs_file_.c_str());
   if (!loadOkay)
@@ -375,32 +170,12 @@ TEST_F(ValidatorTest,parseSpecificationsRightSpecs)
     path + std::string("'\nError was") + std::string(test_doc.ErrorDesc());
     throw ParserException(error);
   }
-  //parse specifications.xml to get elspecs
-  std::map<std::string,ElSpecs> map_or = parseSpecifications(&test_doc);
+  std::map<std::string,ElSpecs> specs_map = parseSpecifications(&test_doc);
+  std::string specs = mapToString(specs_map);
+  //ROS_INFO("%s",specs.c_str());
+  std::string expected_specs = readFile(std::string("/test/files/specifications.txt"));
+ EXPECT_STREQ(specs.c_str(), expected_specs.c_str());
 
-  //compare required, allowed and default_value tags
-  for(std::map<std::string,ElSpecs>::const_iterator it = map_or.begin();
-  it != map_or.end(); ++it)
-  {
-    ElSpecs elspecs_test = specifications[it->first.c_str()];
-    ElSpecs elspecs_or = it->second;
-    std::set<std::string> required_tags_or = elspecs_or.required;
-    for (std::set<std::string>::iterator it1 = required_tags_or.begin(), it1_test=elspecs_test.required.begin(); it1 != required_tags_or.end() && it1_test != elspecs_test.required.end() ; ++it1, ++it1_test)
-    {
-      std::string required_tag_or = *it1; 
-      std::string required_tag_test = *it1_test;
-      EXPECT_STREQ(required_tag_or.c_str(),required_tag_test.c_str());
-    }
-    std::set<std::string> allowed_tags_or = elspecs_or.allowed;
-    for (std::set<std::string>::iterator it2 = allowed_tags_or.begin(), it2_test=elspecs_test.allowed.begin(); it2 != allowed_tags_or.end() && it2_test != elspecs_test.allowed.end() ; ++it2, ++it2_test)
-    {
-      std::string allowed_tag_or = *it2; 
-      std::string allowed_tag_test = *it2_test; 
-      EXPECT_STREQ(allowed_tag_or.c_str(),allowed_tag_test.c_str());
-    }
-    std::string default_value_or = elspecs_or.default_value;
-    EXPECT_STREQ(default_value_or.c_str(),elspecs_test.default_value.c_str());
-  }
 }
 
 TEST_F(ValidatorTest,validityAllowedCheckValueNode)
@@ -552,4 +327,15 @@ TEST_F(ValidatorTest, equalitySpecs)
   EXPECT_TRUE(specs_1 == specs_2);
 }
 
+TEST_F(ValidatorTest, outputElSpecs)
+{  
+
+  ElSpecs elspecs;
+  std::string tmp_2[] = {"map", "robot", "rfid_tag"};
+  elspecs.allowed.insert(tmp_2, tmp_2 + sizeof(tmp_2) / sizeof(tmp_2[0]));
+  std::string tmp_3[] = {"map"};
+  elspecs.required.insert(tmp_3, tmp_3 + sizeof(tmp_3) / sizeof(tmp_3[0]));
+  elspecs.default_value="0";
+  std::cout << elspecs; 
+}
 }  // namespace stdr_parser

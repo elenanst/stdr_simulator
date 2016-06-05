@@ -124,9 +124,8 @@ TEST_F(XmlParserTest, parseLow)
     std::string indent="";
     std::ostringstream output_stream;
     std::string tree = root_node_->printParsedXml(root_node_, indent);
-    ROS_INFO(tree.c_str());
     std::string expected_tree = readFile(std::string("/test/files/test_robot_1_tree.txt"));
-    ROS_INFO(expected_tree.c_str());
+
     EXPECT_STREQ(tree.c_str(), expected_tree.c_str());
     
 
