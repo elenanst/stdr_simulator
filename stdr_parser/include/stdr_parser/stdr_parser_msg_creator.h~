@@ -19,10 +19,13 @@
    * Chris Zalidis, zalidis@gmail.com 
 ******************************************************************************/
 
-#ifndef STDR_PARSER_SPECS
-#define STDR_PARSER_SPECS
+#ifndef STDR_PARSER_MSG_CREATOR
+#define STDR_PARSER_MSG_CREATOR
 
+#include "stdr_parser/stdr_parser_node.h"
+#include "stdr_parser/stdr_parser_validator.h"
 #include "stdr_parser/stdr_parser_tools.h"
+#include <sstream>
 
 /**
 @namespace stdr_parser
@@ -30,54 +33,40 @@
 **/ 
 namespace stdr_parser
 {
-  /**
-  @struct ElSpecs
-  @brief An element of Specs - represents a valid tag
-  **/ 
-  struct ElSpecs
-  {
-    /**
-    @brief Default constructor
-    @return void
-    **/
-    ElSpecs(void);
-    bool operator== (const ElSpecs& rhs) const;
-    
-    friend std::ostream &operator<<(std::ostream &output, 
-                                       const ElSpecs &elspecs );
-    //!< The required tags for the tag
-    std::set<std::string> required;
-    //!< The allowed tags for the tag
-    std::set<std::string> allowed;
-    //!< Default value for the node (if it is a value)
-    std::string default_value;
-  };
   
   /**
-  @struct Specs
-  @brief The STDR parser specifications
+  @class MessageCreator
+  @brief Creates STDR messages from a STDR tree
   **/ 
-  struct Specs
+  class MessageCreator
   {
-    /**
-    @brief Default constructor
-    @return void
-    **/
-    Specs(void);
-    
-    /**
-    @brief Defines equality for Specs instances
-    @return bool True if equal Specs
-    **/
-    bool operator== (const Specs& rhs) const;
-    
-    
-    //!< std::map of valid STDR tags
-    static std::map<std::string,ElSpecs> specs;
-    
-    //!< List of non-mergable tags. Read from stdr_multiple_allowed.xml
-    static std::set<std::string> non_mergable_tags;
+    private:
+     
+      /**
+      @brief Default constructor
+      @return void
+      **/
+      MessageCreator(void);
+      
+    public:
+      
+      /**
+      @brief Creates a pose message from a parsed file
+      @param n [Node*] The root node
+      @return geometry_msgs::Pose2D
+      **/
+      template <typename T>
+      static T createMessage(Node *n,unsigned int id);
+
+      template <typename T>
+      static T stringToType(std::string s)
+      {
+        std::stringstream str;
+        str << s;
+        T temp;
+        str >> temp;
+        return temp;
+      }
   };
 }
-
 #endif
