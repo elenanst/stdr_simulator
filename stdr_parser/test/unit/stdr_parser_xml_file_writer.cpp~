@@ -1,0 +1,15 @@
+
+#include <gtest/gtest.h>
+
+namespace stdr_parser
+{
+
+/**
+ * @class XmlParserTest
+ * @brief Basic Test Fixture for testing XmlParser
+ */
+class XmlParserTest : public ::testing::Test
+{
+
+};
+}
