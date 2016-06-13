@@ -1,0 +1,1 @@
+<co2_sensor>    <co2_sensor_specifications>        <max_range>5</max_range>        <frequency>2</frequency>        <frame_id>5</frame_id>        <pose>            <x>12</x>            <y>24</y>            <theta>47</theta>        </pose>    </co2_sensor_specifications></co2_sensor>

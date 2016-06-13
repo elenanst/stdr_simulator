@@ -174,7 +174,7 @@ TEST_F(ValidatorTest,parseSpecificationsRightSpecs)
   std::string specs = mapToString(specs_map);
   //ROS_INFO("%s",specs.c_str());
   std::string expected_specs = readFile(std::string("/test/files/specifications.txt"));
- EXPECT_STREQ(specs.c_str(), expected_specs.c_str());
+  EXPECT_STREQ(specs.c_str(), expected_specs.c_str());
 
 }
 
