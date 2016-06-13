@@ -1,0 +1,1 @@
+sound_sensor:  sound_sensor_specifications:    angle_span: 5    max_range: 5    frequency: 2    frame_id: 3    pose:      x: 20      y: 32      theta: 47
