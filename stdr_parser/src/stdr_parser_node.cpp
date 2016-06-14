@@ -24,6 +24,8 @@
 
 namespace stdr_parser
 {
+
+  
   /**
   @brief Default constructor
   @return void
@@ -91,28 +93,29 @@ namespace stdr_parser
   @param indent [std::string] The indentation for the specific node
   @return void
   **/
-  std::string Node::printParsedXml(Node *n,std::string indent)
+  std::string Node::printParsedXml(Node *n,std::string indent, std::ostringstream& output_stream_)
   { 
    
-    static std::ostringstream output_stream;
+    
     if(n->value != "")
     {  
       //ROS_ERROR("%s- '%s' (%d) - %d %s",indent.c_str(),n->value.c_str(),
        // n->priority, n->file_row, extractFilename(n->file_origin).c_str()); 
-       output_stream << indent.c_str() << "-" << n->value.c_str() <<"'  (" << n->priority << ") - " << n->file_row << extractFilename(n->file_origin).c_str() ; 
+       output_stream_ << indent.c_str() << "-" << n->value.c_str() <<"'  (" << n->priority << ") - " << n->file_row << extractFilename(n->file_origin).c_str() << "\n" ; 
     }
     else
     {
 //      ROS_ERROR("%s[%s] (%d) - %d %s",indent.c_str(),n->tag.c_str(),
 //        n->priority, n->file_row, extractFilename(n->file_origin).c_str());
-       output_stream << indent.c_str() << "-" << n->tag.c_str() <<"'  (" << n->priority << ") - " << n->file_row << extractFilename(n->file_origin).c_str() ; 
+       output_stream_ << indent.c_str() << "-" << n->tag.c_str() <<"'  (" << n->priority << ") - " << n->file_row << extractFilename(n->file_origin).c_str()<< "\n" ; 
     }  
     
     for(unsigned int i = 0 ; i < n->elements.size() ; i++)
     {
-      printParsedXml(n->elements[i],indent+std::string("| "));
+      printParsedXml(n->elements[i],indent+std::string("| "), output_stream_);
     }
-    return output_stream.str();
+    
+    return output_stream_.str();
   }
   
   /**
@@ -125,6 +128,11 @@ namespace stdr_parser
     {
 
       delete elements[i];
+      
     }
+ //   ROS_INFO("elements are %d", elements.size());
   }
+
+  
+
 }

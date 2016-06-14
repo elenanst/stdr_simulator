@@ -44,6 +44,7 @@ namespace stdr_parser
        */
       void unallocateChildren(void);
 
+
     public:
     
       /**
@@ -91,6 +92,7 @@ namespace stdr_parser
       //!< File it was into
       std::string file_origin;
       
+      
       //!< Row in the original file
       int file_row;
       
@@ -100,7 +102,10 @@ namespace stdr_parser
       @param indent [std::string] The indentation for the specific node
       @return void
       **/
-      std::string printParsedXml(Node *n,std::string indent, std::ostringstream& output_stream);
+      std::string printParsedXml(Node *n,std::string indent, std::ostringstream& output_stream_);
+ 
+ private:
+      friend class NodeTest;
 
   };
   
