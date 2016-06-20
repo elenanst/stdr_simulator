@@ -117,6 +117,7 @@ malformed xml file");
           new_node->value = node_text;
           new_node->file_origin = n->file_origin;
           n->file_row = node->Row();
+          new_node->file_row = node->Row();
           n->elements.push_back(new_node);
         }
         break;

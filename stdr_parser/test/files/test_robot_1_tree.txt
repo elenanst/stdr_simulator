@@ -1,1 +1,65 @@
--STDR_Parser_Root_Node'  (0) - 1test_robot_1.xml| -robot'  (0) - 3test_robot_1.xml| | -filename'  (0) - 1too_simple_robot.xml| | | -robot'  (0) - 2too_simple_robot.xml| | | | -robot_specifications'  (0) - 3too_simple_robot.xml| | | | | -initial_pose'  (0) - 6too_simple_robot.xml| | | | | | -x'  (0) - 4too_simple_robot.xml| | | | | | | -0'  (0) - 0too_simple_robot.xml| | | | | | -y'  (0) - 5too_simple_robot.xml| | | | | | | -0'  (0) - 1718185059too_simple_robot.xml| | | | | | -theta'  (0) - 6too_simple_robot.xml| | | | | | | -0'  (0) - 1835627552too_simple_robot.xml| | -robot_specifications'  (0) - 14test_robot_1.xml| | | -footprint'  (0) - 5test_robot_1.xml| | | | -footprint_specifications'  (0) - 6test_robot_1.xml| | | | | -radius'  (0) - 6test_robot_1.xml| | | | | | -0.05'  (0) - 0test_robot_1.xml| | | -initial_pose'  (0) - 12test_robot_1.xml| | | | -x'  (0) - 10test_robot_1.xml| | | | | -3'  (0) - 0test_robot_1.xml| | | | -y'  (0) - 11test_robot_1.xml| | | | | -2'  (0) - 0test_robot_1.xml| | | | -theta'  (0) - 12test_robot_1.xml| | | | | -1.57'  (0) - 0test_robot_1.xml| | | -laser'  (0) - 16test_robot_1.xml| | | | -filename'  (0) - 1hokuyo_URG_04LX.xml| | | | | -laser'  (0) - 2hokuyo_URG_04LX.xml| | | | | | -laser_specifications'  (0) - 14hokuyo_URG_04LX.xml| | | | | | | -max_angle'  (0) - 3hokuyo_URG_04LX.xml| | | | | | | | -2.09439510239'  (0) - 0hokuyo_URG_04LX.xml| | | | | | | -min_angle'  (0) - 4hokuyo_URG_04LX.xml| | | | | | | | --2.09439510239'  (0) - 0hokuyo_URG_04LX.xml| | | | | | | -max_range'  (0) - 5hokuyo_URG_04LX.xml| | | | | | | | -4.09'  (0) - 1634887024hokuyo_URG_04LX.xml| | | | | | | -min_range'  (0) - 6hokuyo_URG_04LX.xml| | | | | | | | -0.06'  (0) - 1835627552hokuyo_URG_04LX.xml| | | | | | | -num_rays'  (0) - 7hokuyo_URG_04LX.xml| | | | | | | | -667'  (0) - 0hokuyo_URG_04LX.xml| | | | | | | -frequency'  (0) - 8hokuyo_URG_04LX.xml| | | | | | | | -10'  (0) - 0hokuyo_URG_04LX.xml| | | | | | | -pose'  (0) - 12hokuyo_URG_04LX.xml| | | | | | | | -x'  (0) - 10hokuyo_URG_04LX.xml| | | | | | | | | -0'  (0) - 0hokuyo_URG_04LX.xml| | | | | | | | -y'  (0) - 11hokuyo_URG_04LX.xml| | | | | | | | | -0'  (0) - 0hokuyo_URG_04LX.xml| | | | | | | | -theta'  (0) - 12hokuyo_URG_04LX.xml| | | | | | | | | -0'  (0) - 0hokuyo_URG_04LX.xml| | | | | | | -noise'  (0) - 16hokuyo_URG_04LX.xml| | | | | | | | -filename'  (0) - 1noise_gauss.xml| | | | | | | | | -noise'  (0) - 2noise_gauss.xml| | | | | | | | | | -noise_specifications'  (0) - 4noise_gauss.xml| | | | | | | | | | | -noise_mean'  (0) - 3noise_gauss.xml| | | | | | | | | | | | -0.1'  (0) - 35045712noise_gauss.xml| | | | | | | | | | | -noise_std'  (0) - 4noise_gauss.xml| | | | | | | | | | | | -0.01'  (0) - 0noise_gauss.xml| | | | | | | | -noise_specifications'  (0) - 18hokuyo_URG_04LX.xml| | | | | | | | | -noise_mean'  (0) - 17hokuyo_URG_04LX.xml| | | | | | | | | | -0.5'  (0) - 36776704hokuyo_URG_04LX.xml| | | | | | | | | -noise_std'  (0) - 18hokuyo_URG_04LX.xml| | | | | | | | | | -0.05'  (0) - 0hokuyo_URG_04LX.xml| | | | -laser_specifications'  (0) - 17test_robot_1.xml| | | | | -pose'  (0) - 18test_robot_1.xml| | | | | | -theta'  (0) - 18test_robot_1.xml| | | | | | | --3.1415'  (0) - 1601795173test_robot_1.xml
+-STDR_Parser_Root_Node'  (0) - 1test_robot_1.xml
+| -robot'  (0) - 3test_robot_1.xml
+| | -filename'  (0) - 1too_simple_robot.xml
+| | | -robot'  (0) - 2too_simple_robot.xml
+| | | | -robot_specifications'  (0) - 3too_simple_robot.xml
+| | | | | -initial_pose'  (0) - 6too_simple_robot.xml
+| | | | | | -x'  (0) - 4too_simple_robot.xml
+| | | | | | | -0'  (0) - 4too_simple_robot.xml
+| | | | | | -y'  (0) - 5too_simple_robot.xml
+| | | | | | | -0'  (0) - 5too_simple_robot.xml
+| | | | | | -theta'  (0) - 6too_simple_robot.xml
+| | | | | | | -0'  (0) - 6too_simple_robot.xml
+| | -robot_specifications'  (0) - 14test_robot_1.xml
+| | | -footprint'  (0) - 5test_robot_1.xml
+| | | | -footprint_specifications'  (0) - 6test_robot_1.xml
+| | | | | -radius'  (0) - 6test_robot_1.xml
+| | | | | | -0.05'  (0) - 6test_robot_1.xml
+| | | -initial_pose'  (0) - 12test_robot_1.xml
+| | | | -x'  (0) - 10test_robot_1.xml
+| | | | | -3'  (0) - 10test_robot_1.xml
+| | | | -y'  (0) - 11test_robot_1.xml
+| | | | | -2'  (0) - 11test_robot_1.xml
+| | | | -theta'  (0) - 12test_robot_1.xml
+| | | | | -1.57'  (0) - 12test_robot_1.xml
+| | | -laser'  (0) - 16test_robot_1.xml
+| | | | -filename'  (0) - 1hokuyo_URG_04LX.xml
+| | | | | -laser'  (0) - 2hokuyo_URG_04LX.xml
+| | | | | | -laser_specifications'  (0) - 14hokuyo_URG_04LX.xml
+| | | | | | | -max_angle'  (0) - 3hokuyo_URG_04LX.xml
+| | | | | | | | -2.09439510239'  (0) - 3hokuyo_URG_04LX.xml
+| | | | | | | -min_angle'  (0) - 4hokuyo_URG_04LX.xml
+| | | | | | | | --2.09439510239'  (0) - 4hokuyo_URG_04LX.xml
+| | | | | | | -max_range'  (0) - 5hokuyo_URG_04LX.xml
+| | | | | | | | -4.09'  (0) - 5hokuyo_URG_04LX.xml
+| | | | | | | -min_range'  (0) - 6hokuyo_URG_04LX.xml
+| | | | | | | | -0.06'  (0) - 6hokuyo_URG_04LX.xml
+| | | | | | | -num_rays'  (0) - 7hokuyo_URG_04LX.xml
+| | | | | | | | -667'  (0) - 7hokuyo_URG_04LX.xml
+| | | | | | | -frequency'  (0) - 8hokuyo_URG_04LX.xml
+| | | | | | | | -10'  (0) - 8hokuyo_URG_04LX.xml
+| | | | | | | -pose'  (0) - 12hokuyo_URG_04LX.xml
+| | | | | | | | -x'  (0) - 10hokuyo_URG_04LX.xml
+| | | | | | | | | -0'  (0) - 10hokuyo_URG_04LX.xml
+| | | | | | | | -y'  (0) - 11hokuyo_URG_04LX.xml
+| | | | | | | | | -0'  (0) - 11hokuyo_URG_04LX.xml
+| | | | | | | | -theta'  (0) - 12hokuyo_URG_04LX.xml
+| | | | | | | | | -0'  (0) - 12hokuyo_URG_04LX.xml
+| | | | | | | -noise'  (0) - 16hokuyo_URG_04LX.xml
+| | | | | | | | -filename'  (0) - 1noise_gauss.xml
+| | | | | | | | | -noise'  (0) - 2noise_gauss.xml
+| | | | | | | | | | -noise_specifications'  (0) - 4noise_gauss.xml
+| | | | | | | | | | | -noise_mean'  (0) - 3noise_gauss.xml
+| | | | | | | | | | | | -0.1'  (0) - 3noise_gauss.xml
+| | | | | | | | | | | -noise_std'  (0) - 4noise_gauss.xml
+| | | | | | | | | | | | -0.01'  (0) - 4noise_gauss.xml
+| | | | | | | | -noise_specifications'  (0) - 18hokuyo_URG_04LX.xml
+| | | | | | | | | -noise_mean'  (0) - 17hokuyo_URG_04LX.xml
+| | | | | | | | | | -0.5'  (0) - 17hokuyo_URG_04LX.xml
+| | | | | | | | | -noise_std'  (0) - 18hokuyo_URG_04LX.xml
+| | | | | | | | | | -0.05'  (0) - 18hokuyo_URG_04LX.xml
+| | | | -laser_specifications'  (0) - 17test_robot_1.xml
+| | | | | -pose'  (0) - 18test_robot_1.xml
+| | | | | | -theta'  (0) - 18test_robot_1.xml
+| | | | | | | --3.1415'  (0) - 18test_robot_1.xml
+

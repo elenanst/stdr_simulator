@@ -46,16 +46,8 @@ namespace stdr_parser
       @return void
       **/
       MessageCreator(void);
-      
-      template <typename T>
-      static T stringToType(std::string s)
-      {
-        std::stringstream str;
-        str << s;
-        T temp;
-        str >> temp;
-        return temp;
-      }
+  
+
     public:
       
       /**
@@ -66,7 +58,16 @@ namespace stdr_parser
       template <typename T>
       static T createMessage(Node *n,unsigned int id);
 
-  
+          
+      template <typename T>
+      static T stringToType(std::string s)
+      {
+        std::stringstream str;
+        str << s;
+        T temp;
+        str >> temp;
+        return temp;
+      }
   };
 }
 #endif

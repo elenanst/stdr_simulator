@@ -99,14 +99,10 @@ namespace stdr_parser
     
     if(n->value != "")
     {  
-      //ROS_ERROR("%s- '%s' (%d) - %d %s",indent.c_str(),n->value.c_str(),
-       // n->priority, n->file_row, extractFilename(n->file_origin).c_str()); 
        output_stream_ << indent.c_str() << "-" << n->value.c_str() <<"'  (" << n->priority << ") - " << n->file_row << extractFilename(n->file_origin).c_str() << "\n" ; 
     }
     else
     {
-//      ROS_ERROR("%s[%s] (%d) - %d %s",indent.c_str(),n->tag.c_str(),
-//        n->priority, n->file_row, extractFilename(n->file_origin).c_str());
        output_stream_ << indent.c_str() << "-" << n->tag.c_str() <<"'  (" << n->priority << ") - " << n->file_row << extractFilename(n->file_origin).c_str()<< "\n" ; 
     }  
     
@@ -124,13 +120,13 @@ namespace stdr_parser
   */
   void Node::unallocateChildren(void)
   {
-    for(unsigned int i = 0 ; i < elements.size() ; i++)
-    {
 
+  
+    for(unsigned int i = 0 ; i < elements.size() ; i++)
+    {     
       delete elements[i];
-      
+      elements.erase(elements.begin() + i);
     }
- //   ROS_INFO("elements are %d", elements.size());
   }
 
   

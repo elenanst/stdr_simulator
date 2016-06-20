@@ -1,1 +1,0 @@
-<rfid_reader>    <rfid_reader_specifications>        <max_range>5</max_range>        <angle_span>2</angle_span>        <signal_cutoff>5</signal_cutoff>        <frequency>2</frequency>        <frame_id>2</frame_id>        <pose>            <x>10</x>            <y>2</y>            <theta>37</theta>        </pose>    </rfid_reader_specifications></rfid_reader>

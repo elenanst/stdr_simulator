@@ -45,4 +45,13 @@ TEST(ToolsTest, extractDirname)
   EXPECT_STREQ(extractDirname(s3).c_str(), "/home/user");
 }
 
+TEST(ToolsTest, explodeString)
+{
+  std::string s1 = "/home/user/robot.yaml";
+  std::string words[] = {"home", "user", "robot.yaml",""};
+  std::set<std::string> expected(words, words + sizeof(words)/sizeof(words[0]));
+  std::set<std::string> output = explodeString(s1, '/');
+  ASSERT_TRUE(expected == output);
+}
+
 }  // namespace stdr_parser

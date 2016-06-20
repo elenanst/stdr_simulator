@@ -90,6 +90,7 @@ namespace stdr_parser
       msg.theta =  stdr_parser::MessageCreator::stringToType<float>(
         n->elements[indexes[0]]->elements[0]->value.c_str());
     }
+    
     return msg;
   }
   
@@ -344,7 +345,7 @@ namespace stdr_parser
     }
     else
     {
-      msg.pose.x =  stdr_parser::MessageCreator::stringToType<float>(
+    msg.pose.x =  stdr_parser::MessageCreator::stringToType<float>(
         Validator::getSpecs("x").default_value.c_str());
       msg.pose.y = stdr_parser::MessageCreator::stringToType<float>(
         Validator::getSpecs("y").default_value.c_str());

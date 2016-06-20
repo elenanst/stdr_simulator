@@ -33,6 +33,42 @@ namespace stdr_parser
 
   }
 
+
+    template void XmlFileWriter::messageToFile
+    (geometry_msgs::Point msg,std::string file_name);
+
+  
+  //!------------------------------------------------------------------
+  //!< Template specialization for geometry_msgs::Point
+  template<>
+  void XmlFileWriter::messageToXmlElement<geometry_msgs::Point>
+  (geometry_msgs::Point msg,TiXmlNode* base){
+    TiXmlElement* point;
+    point = new TiXmlElement("point");
+    base->LinkEndChild(point);  
+
+   //!< Create x
+    TiXmlElement* x;
+    x = new TiXmlElement("x");
+    point->LinkEndChild(x);
+    TiXmlText* x_text = new TiXmlText(SSTR(msg.x));
+    x->LinkEndChild(x_text);
+    
+    //!< Create y
+    TiXmlElement* y;
+    y = new TiXmlElement("y");
+    point->LinkEndChild(y);
+    TiXmlText * y_text = new TiXmlText(SSTR(msg.y));
+    y->LinkEndChild(y_text);
+    
+    //!< Create theta
+    TiXmlElement* z;
+    z = new TiXmlElement("z");
+    point->LinkEndChild(z);
+    TiXmlText * z_text = new TiXmlText(SSTR(msg.z));
+    z->LinkEndChild(z_text);
+  }
+
   //!<-----------------------------------------------------------------
   //!< Template declaration for stdr_msgs::Noise
   template void XmlFileWriter::messageToFile
@@ -121,6 +157,11 @@ namespace stdr_parser
     }
   }
   
+ //!------------------------------------------------------------------
+  //!< Template declaration for geometry_msgs::Pose2D
+  template void XmlFileWriter::messageToFile
+    (geometry_msgs::Pose2D msg,std::string file_name);
+
   //!------------------------------------------------------------------
   //!< Template specialization for geometry_msgs::Pose2D
   template <>

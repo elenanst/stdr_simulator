@@ -23,6 +23,7 @@
 #include "stdr_parser/stdr_parser_msg_creator.h"
 #include "stdr_parser/stdr_xml_parser.h"
 #include "stdr_parser/stdr_parser_xml_file_writer.h"
+#include "stdr_parser/stdr_parser_validator.h"
 
 
 namespace stdr_parser
@@ -30,11 +31,12 @@ namespace stdr_parser
 
 
 /**
- * @class ValidatorTest
- * @brief Basic Test Fixture for testing Validator
+ * @class MsgCreatorTest
+ * @brief Basic Test Fixture for testing MsgCreator
  */
 class MsgCreatorTest : public ::testing::Test
 {
+
  protected:
   MsgCreatorTest()
   {
@@ -42,9 +44,11 @@ class MsgCreatorTest : public ::testing::Test
 
   virtual void TearDown()
   {
-    
+    delete root_node_;
+    remove(utils_file_.c_str());
   }
 
+  //initialize members
   void init(const std::string& filename)
   {
     utils_file_ = ros::package::getPath("stdr_parser") +
@@ -52,190 +56,281 @@ class MsgCreatorTest : public ::testing::Test
     root_node_ = new Node(); 
     id_ = 0;
   }
-   
- std::string readFile(const std::string& file)
-  {
-    
-     std::ifstream ifs(file.c_str());
-     std::string content( (std::istreambuf_iterator<char>(ifs) ),
-                       (std::istreambuf_iterator<char>()    ) );
-     content.erase(std::remove(content.begin(), content.end(), '\n'), content.end());
-
-     return content;
- }
-
  
+  //read file into string
+  std::string readFile(const std::string& file)
+  {
+    std::ifstream ifs(file.c_str());
+    std::string content( (std::istreambuf_iterator<char>(ifs) ),
+                       (std::istreambuf_iterator<char>()    ) );
+    content.erase(std::remove(content.begin(), content.end(), '\n'), content.end());
+    return content;
+  }
+
+  //members of test
   std::string utils_file_;
   Node* root_node_;
   unsigned int id_;
   
 };
 
+
 TEST_F(MsgCreatorTest, createMessageNoise)
 {
-  init(std::string("/test/files/elements/noise_gauss.xml"));
+  init(std::string("/test/files/elements/Noise.xml"));
+  std::string expected_element = readFile(utils_file_);
+
+  //read xml file into Node
   XmlParser::parse(utils_file_, root_node_);
+
+  //create message from Node
   stdr_msgs::Noise msg = MessageCreator::createMessage<stdr_msgs::Noise>(root_node_, id_);
-  init(std::string("/test/files/elements/noise_gauss_message.xml"));
+
+/*uint32_t serial_size = ros::serialization::serializationLength(msg);
+boost::array<char,1024> buffer;//(new char[serial_size]);
+
+ros::serialization::OStream stream(buffer.get(), serial_size);
+ros::serialization::serialize(stream, msg);
+std::string element;
+std::copy(buffer.begin(), buffer.begin()+serial_size, std::back_inserter(element));
+*/
+  //write message to file and read into string
+  init(std::string("/test/files/elements/Noise_temp.xml"));
   XmlFileWriter::messageToFile<>(msg, utils_file_);
   std::string element = readFile(utils_file_);
-  init("/test/files/elements/noise_gauss_message_exp.xml");
-  std::string expected_element = readFile(utils_file_);
-  EXPECT_STREQ(element.c_str(), expected_element.c_str());
- 
+
+  //compare output with expected string
+  EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }
 
 TEST_F(MsgCreatorTest, createMessageFootprint)
 {
-  init(std::string("/test/files/elements/element_ex_Footprint.xml"));
+  init(std::string("/test/files/elements/Footprint.xml"));
+  std::string expected_element = readFile(utils_file_);
+
+  //read xml file into Node
   XmlParser::parse(utils_file_, root_node_);
+
+  //create message from Node
   stdr_msgs::FootprintMsg msg = MessageCreator::createMessage<stdr_msgs::FootprintMsg>(root_node_, id_);
-  init(std::string("/test/files/elements/footprint_message.xml"));
+
+  //write message to file and read into string
+  init(std::string("/test/files/elements/Footprint_temp.xml"));
   XmlFileWriter::messageToFile<>(msg, utils_file_);
   std::string element = readFile(utils_file_);
-  init("/test/files/elements/footprint_message_exp.xml");
-  std::string expected_element = readFile(utils_file_);
-  EXPECT_STREQ(element.c_str(), expected_element.c_str());
- 
+
+  //compare output with expected string
+  EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }
 
 TEST_F(MsgCreatorTest, createMessageLaserSensor)
 {
-  init(std::string("/test/files/elements/element_ex_LaserSensor.xml"));
+  init(std::string("/test/files/elements/LaserSensor.xml"));
+  std::string expected_element = readFile(utils_file_);
+
+  //read xml file into Node
   XmlParser::parse(utils_file_, root_node_);
+
+  //create message from Node
   stdr_msgs::LaserSensorMsg msg = MessageCreator::createMessage<stdr_msgs::LaserSensorMsg>(root_node_, id_);
-  init(std::string("/test/files/elements/LaserSensor_message.xml"));
+
+  //write message to file and read into string
+  init(std::string("/test/files/elements/LaserSensor_temp.xml"));
   XmlFileWriter::messageToFile<>(msg, utils_file_);
   std::string element = readFile(utils_file_);
-  init("/test/files/elements/LaserSensor_message_exp.xml");
-  std::string expected_element = readFile(utils_file_);
-  EXPECT_STREQ(element.c_str(), expected_element.c_str());
- 
+  
+  //compare output with expected string
+  EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }
 
 TEST_F(MsgCreatorTest, createMessageSonarSensor)
 {
-  init(std::string("/test/files/elements/element_ex_SonarSensor.xml"));
+  init(std::string("/test/files/elements/SonarSensor.xml"));
+  std::string expected_element = readFile(utils_file_);
+
+  //read xml file into Node
   XmlParser::parse(utils_file_, root_node_);
+
+  //create message from Node
   stdr_msgs::SonarSensorMsg msg = MessageCreator::createMessage<stdr_msgs::SonarSensorMsg>(root_node_, id_);
-  init(std::string("/test/files/elements/SonarSensor_message.xml"));
+
+  //write message to file and read into string
+  init(std::string("/test/files/elements/SonarSensor_temp.xml"));
   XmlFileWriter::messageToFile<>(msg, utils_file_);
   std::string element = readFile(utils_file_);
-  init("/test/files/elements/SonarSensor_message_exp.xml");
-  std::string expected_element = readFile(utils_file_);
-  EXPECT_STREQ(element.c_str(), expected_element.c_str());
- 
+
+  //compare output with expected string
+  EXPECT_STREQ(expected_element.c_str(), element.c_str());
+
 }
 
 TEST_F(MsgCreatorTest, createMessageRfidSensor)
 {
-  init(std::string("/test/files/elements/element_ex_RfidSensor.xml"));
+  init(std::string("/test/files/elements/RfidSensor.xml"));
+  std::string expected_element = readFile(utils_file_);
+ 
+  //read xml file into Node
   XmlParser::parse(utils_file_, root_node_);
+
+  //create message from Node
   stdr_msgs::RfidSensorMsg msg = MessageCreator::createMessage<stdr_msgs::RfidSensorMsg>(root_node_, id_);
-  init(std::string("/test/files/elements/RfidSensor_message.xml"));
+
+  //write message to file and read into string
+  init(std::string("/test/files/elements/RfidSensor_temp.xml"));
   XmlFileWriter::messageToFile<>(msg, utils_file_);
   std::string element = readFile(utils_file_);
-  init("/test/files/elements/RfidSensor_message_exp.xml");
-  std::string expected_element = readFile(utils_file_);
-  EXPECT_STREQ(element.c_str(), expected_element.c_str());
- 
+  
+  //compare output with expected string
+  EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }
 
 TEST_F(MsgCreatorTest, createMessageCO2Sensor)
 {
-  init(std::string("/test/files/elements/element_ex_CO2Sensor.xml"));
+  init(std::string("/test/files/elements/CO2Sensor.xml"));
+  std::string expected_element = readFile(utils_file_);
+
+  //read xml file into Node
   XmlParser::parse(utils_file_, root_node_);
+
+  //create message from Node
   stdr_msgs::CO2SensorMsg msg = MessageCreator::createMessage<stdr_msgs::CO2SensorMsg>(root_node_, id_);
-  init(std::string("/test/files/elements/CO2Sensor_message.xml"));
+
+  //write message to file and read into string
+  init(std::string("/test/files/elements/CO2Sensor_temp.xml"));
   XmlFileWriter::messageToFile<>(msg, utils_file_);
   std::string element = readFile(utils_file_);
-  init("/test/files/elements/CO2Sensor_message_exp.xml");
-  std::string expected_element = readFile(utils_file_);
-  EXPECT_STREQ(element.c_str(), expected_element.c_str());
- 
+
+  //compare output with expected string
+  EXPECT_STREQ(expected_element.c_str(), element.c_str()); 
 }
 
 TEST_F(MsgCreatorTest, createMessageThermalSensor)
 {
-  init(std::string("/test/files/elements/element_ex_ThermalSensor.xml"));
+  init(std::string("/test/files/elements/ThermalSensor.xml"));
+  std::string expected_element = readFile(utils_file_);
+
+  //read xml file into Node
   XmlParser::parse(utils_file_, root_node_);
+
+  //create message from Node
   stdr_msgs::ThermalSensorMsg msg = MessageCreator::createMessage<stdr_msgs::ThermalSensorMsg>(root_node_, id_);
-  init(std::string("/test/files/elements/ThermalSensor_message.xml"));
+
+  //write message to file and read into string
+  init(std::string("/test/files/elements/ThermalSensor_temp.xml"));
   XmlFileWriter::messageToFile<>(msg, utils_file_);
   std::string element = readFile(utils_file_);
-  init("/test/files/elements/ThermalSensor_message_exp.xml");
-  std::string expected_element = readFile(utils_file_);
-  EXPECT_STREQ(element.c_str(), expected_element.c_str());
- 
+
+  //compare output with expected string
+  EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }
 
 TEST_F(MsgCreatorTest, createMessageSoundSensor)
 {
-  init(std::string("/test/files/elements/element_ex_SoundSensor.xml"));
+  init(std::string("/test/files/elements/SoundSensor.xml"));
+  std::string expected_element = readFile(utils_file_);
+
+  //read xml file into Node
   XmlParser::parse(utils_file_, root_node_);
+
+  //create message from Node
   stdr_msgs::SoundSensorMsg msg = MessageCreator::createMessage<stdr_msgs::SoundSensorMsg>(root_node_, id_);
-  init(std::string("/test/files/elements/SoundSensor_message.xml"));
+
+  //write message to file and read into string
+  init(std::string("/test/files/elements/SoundSensor_temp.xml"));
   XmlFileWriter::messageToFile<>(msg, utils_file_);
   std::string element = readFile(utils_file_);
-  init("/test/files/elements/SoundSensor_message_exp.xml");
-  std::string expected_element = readFile(utils_file_);
-  EXPECT_STREQ(element.c_str(), expected_element.c_str());
- 
+
+  //compare output with expected string
+  EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }
 
 TEST_F(MsgCreatorTest, createMessageKinematic)
 {
-  init(std::string("/test/files/elements/element_ex_Kinematic.xml"));
+  init(std::string("/test/files/elements/Kinematic.xml"));
+  std::string expected_element = readFile(utils_file_);
+
+  //read xml file into Node
   XmlParser::parse(utils_file_, root_node_);
+
+  //create message from Node
   stdr_msgs::KinematicMsg msg = MessageCreator::createMessage<stdr_msgs::KinematicMsg>(root_node_, id_);
-  init(std::string("/test/files/elements/Kinematic_message.xml"));
+
+  //write message to file and read into string
+  init(std::string("/test/files/elements/Kinematic_temp.xml"));
   XmlFileWriter::messageToFile<>(msg, utils_file_);
   std::string element = readFile(utils_file_);
-  init("/test/files/elements/Kinematic_message_exp.xml");
-  std::string expected_element = readFile(utils_file_);
-  EXPECT_STREQ(element.c_str(), expected_element.c_str());
- 
+
+  //compare output with expected string
+  EXPECT_STREQ(expected_element.c_str(), element.c_str()); 
 }
 
 TEST_F(MsgCreatorTest, createMessageRobot)
 {
-  init(std::string("/test/files/elements/element_ex_Robot.xml"));
+  init(std::string("/test/files/elements/Robot.xml"));
+  std::string expected_element = readFile(utils_file_);
+
+  //read xml file into Node
   XmlParser::parse(utils_file_, root_node_);
+
+  //create message from Node
   stdr_msgs::RobotMsg msg = MessageCreator::createMessage<stdr_msgs::RobotMsg>(root_node_, id_);
-  init(std::string("/test/files/elements/Robot_message.xml"));
+
+  //write message to file and read into string
+  init(std::string("/test/files/elements/Robot_temp.xml"));
   XmlFileWriter::messageToFile<>(msg, utils_file_);
   std::string element = readFile(utils_file_);
-  init("/test/files/elements/Robot_message_exp.xml");
-  std::string expected_element = readFile(utils_file_);
-  EXPECT_STREQ(element.c_str(), expected_element.c_str());
- 
+  
+  //compare output with expected string
+  EXPECT_STREQ(expected_element.c_str(), element.c_str()); 
 }
-/*TEST_F(MsgCreatorTest, createMessagePose2D)
+
+ 
+TEST_F(MsgCreatorTest, createMessagePose2D)
 {
-  init(std::string("/test/files/elements/element_ex_Pose2D.xml"));
+  init(std::string("/test/files/elements/Pose2D.xml"));
+  std::string expected_element = readFile(utils_file_);
+
+  //read xml file into Node
   XmlParser::parse(utils_file_, root_node_);
-  geometry_msgs::Pose2D msg;
-  msg = MessageCreator::createMessage<geometry_msgs::Pose2D>(root_node_, id_);
-  init(std::string("/test/files/elements/pose2D_message.xml"));
+
+  std::vector<int> indexes;
+  indexes = root_node_->getTag("pose");
+
+  //create message from Node
+  geometry_msgs::Pose2D msg = MessageCreator::createMessage<geometry_msgs::Pose2D>(root_node_->elements[indexes[0]], id_);
+
+  //write message to file and read into string
+  init(std::string("/test/files/elements/Pose2D_temp.xml"));
   XmlFileWriter::messageToFile<>(msg, utils_file_);
   std::string element = readFile(utils_file_);
-  init("/test/files/elements/pose2D_message_exp.xml");
-  std::string expected_element = readFile(utils_file_);
-  EXPECT_STREQ(element.c_str(), expected_element.c_str());
- 
+
+  //compare output with expected string
+  EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }
-*/
-/*TEST_F(MsgCreatorTest, createMessagePoint)
+
+
+TEST_F(MsgCreatorTest, createMessagePoint)
 {
-  init(std::string("/test/files/nodes/point.xml"));
+  init(std::string("/test/files/elements/Point.xml"));
+  std::string expected_element = readFile(utils_file_);
+
+  //read xml file into Node
   XmlParser::parse(utils_file_, root_node_);
-  geometry_msgs::Point msg = MessageCreator::createMessage<geometry_msgs::Point>(root_node_, id_);
-  init(std::string("/test/files/nodes/point_message.xml"));
+
+  std::vector<int> indexes;
+  indexes = root_node_->getTag("point");
+
+  //create message from Node
+  geometry_msgs::Point msg = MessageCreator::createMessage<geometry_msgs::Point>(root_node_->elements[indexes[0]], id_);
+
+
+  //write message to file and read into string
+  init(std::string("/test/files/elements/Point_temp.xml"));
   XmlFileWriter::messageToFile<>(msg, utils_file_);
   std::string element = readFile(utils_file_);
-  init("/test/files/nodes/point_message_exp.xml");
-  std::string expected_element = readFile(utils_file_);
-  EXPECT_STREQ(element.c_str(), expected_element.c_str());
- 
-}*/
+  
+  //compare output with expected string
+  EXPECT_STREQ(expected_element.c_str(), element.c_str());
+}
+
 }  // namespace stdr_parser

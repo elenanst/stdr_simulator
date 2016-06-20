@@ -90,6 +90,7 @@ namespace stdr_parser
       msg.theta =  stdr_parser::MessageCreator::stringToType<float>(
         n->elements[indexes[0]]->elements[0]->value.c_str());
     }
+    
     return msg;
   }
   
@@ -130,6 +131,7 @@ namespace stdr_parser
       msg.z =  stdr_parser::MessageCreator::stringToType<float>(
         n->elements[indexes[0]]->elements[0]->value.c_str());
     }
+    ROS_INFO("x in msgcreator is %f", msg.x);
     return msg;
   }
 
@@ -153,7 +155,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.noiseMean =  stdr_parser::MessageCreator::stringToType<float>(
-        Validator::getSpecs["noise_mean"].default_value.c_str());
+        Validator::getSpecs("noise_mean").default_value.c_str());
     }
     else
     {
@@ -344,7 +346,7 @@ namespace stdr_parser
     }
     else
     {
-      msg.pose.x =  stdr_parser::MessageCreator::stringToType<float>(
+    msg.pose.x =  stdr_parser::MessageCreator::stringToType<float>(
         Validator::getSpecs("x").default_value.c_str());
       msg.pose.y = stdr_parser::MessageCreator::stringToType<float>(
         Validator::getSpecs("y").default_value.c_str());
@@ -766,7 +768,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.frequency = stdr_parser::MessageCreator::stringToType<float>(
-        SValidator::getSpecs("frequency").default_value.c_str());
+        Validator::getSpecs("frequency").default_value.c_str());
     }
     else
     {

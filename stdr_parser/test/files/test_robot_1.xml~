@@ -1,0 +1,11 @@
+<robot>
+  <filename>robots/too_simple_robot.xml</filename>
+  <robot_specifications>
+    <footprint>
+      <footprint_specifications>
+        <radius>0.05</radius>
+      </footprint_specifications>
+    </footprint>
+   
+  </robot_specifications>
+</robot>

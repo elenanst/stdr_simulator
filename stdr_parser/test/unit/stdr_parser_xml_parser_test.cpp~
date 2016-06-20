@@ -59,16 +59,14 @@ class XmlParserTest : public ::testing::Test
 
   std::string readFile(const std::string& filename)
   {
-      std::string file = ros::package::getPath("stdr_parser") +
-                    filename;
-      std::ifstream t(file.c_str());
-      std::string str;
-      t.seekg(0, std::ios::end);   
-      str.reserve(t.tellg());
-      t.seekg(0, std::ios::beg);
-      str.assign((std::istreambuf_iterator<char>(t)),
-            std::istreambuf_iterator<char>());
-      return str;
+    std::ostringstream output_stream;
+    std::ifstream inFile (filename.c_str());
+    std::string line;
+    while( getline(inFile, line) ) {
+        output_stream << line << std::endl;
+    } 
+    std::string content = output_stream.str().substr(0, output_stream.str().size()-1);
+    return content;
 
   }
   // Accessors for private methods of XmlParser
@@ -112,6 +110,26 @@ TEST_F(XmlParserTest, parseAlternateResourceLocation)
   EXPECT_THROW(XmlParser::parse(robot_file_, root_node_), ParserException);
 }
 
+
+TEST_F(XmlParserTest, parse)
+{
+    init(std::string("/test/files/test_robot_1.xml"));
+    
+    XmlParser::parse(robot_file_,root_node_);
+
+    //get string by calling printParsedXml
+    std::string indent="";
+    std::ostringstream output_stream;
+    std::string tree = root_node_->printParsedXml(root_node_, indent, output_stream);
+
+    //read expected tree
+    init(std::string("/test/files/test_robot_1_tree.txt"));
+    std::string expected_tree = readFile(robot_file_);
+    EXPECT_STREQ(expected_tree.c_str(), tree.c_str());
+    
+
+}
+
 TEST_F(XmlParserTest, parseLow)
 {
     init(std::string("/test/files/test_robot_1.xml"));
@@ -120,13 +138,19 @@ TEST_F(XmlParserTest, parseLow)
     doc.LoadFile(robot_file_.c_str());
     root_node_->file_origin = robot_file_;
     root_node_->file_row = doc.Row();
+
+    
     parseLow(&doc,root_node_);
+
+    //get string by calling printParsedXml
     std::string indent="";
     std::ostringstream output_stream;
-    std::string tree = root_node_->printParsedXml(root_node_, indent);
-    std::string expected_tree = readFile(std::string("/test/files/test_robot_1_tree.txt"));
+    std::string tree = root_node_->printParsedXml(root_node_, indent, output_stream);
 
-    EXPECT_STREQ(tree.c_str(), expected_tree.c_str());
+    //read expected tree
+    init(std::string("/test/files/test_robot_1_tree.txt));
+    std::string expected_tree = readFile(robot_file_);
+    EXPECT_STREQ(expected_tree.c_str(), tree.c_str());
     
 
 }

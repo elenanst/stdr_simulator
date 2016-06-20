@@ -52,10 +52,11 @@ namespace stdr_parser
       return;
     }
     std::string tag = n->tag;
-  
-    if(Specs::specs.find(tag) == Specs::specs.end() &&
+    
+    if(specs_struct.specs.find(tag) == specs_struct.specs.end() &&
       tag != "STDR_Parser_Root_Node")
     {
+      ROS_INFO("problem 1");
       std::string error = 
         std::string("STDR parser : ") + n->tag + 
         std::string(" is not a valid tag") + 
@@ -68,9 +69,10 @@ namespace stdr_parser
       std::string child_value = n->elements[i]->value;
       if(tag != "STDR_Parser_Root_Node" && child_value == "")
       {
-        if(Specs::specs[tag].allowed.find(child_tag) == 
-          Specs::specs[tag].allowed.end())
+        if(specs_struct.specs[tag].allowed.find(child_tag) == 
+          specs_struct.specs[tag].allowed.end())
         {
+          ROS_INFO("problem 2");
           int decreaser = (extractFilename(n->elements[i]->file_origin) == 
           extractFilename(file_name) ? 1 : 0);
           std::string error = 
@@ -294,8 +296,6 @@ namespace stdr_parser
   void Validator::validate(std::string file_name, Node* n)
   {
     
-    specs_struct.specs.clear();
-    specs_struct.non_mergable_tags.clear();
     
     std::string base_path_ = ros::package::getPath("stdr_resources");
     
@@ -345,8 +345,14 @@ namespace stdr_parser
 
   Specs Validator::clearSpecs(void)
   {
-    specs_struct.specs.clear();
-    specs_struct.non_mergable_tags.clear();
+    if(!specs_struct.specs.empty()) 
+    {
+      specs_struct.specs.clear();
+    }
+    if(!specs_struct.non_mergable_tags.empty())
+    {
+      specs_struct.non_mergable_tags.clear();
+    }
     return specs_struct;
   }
 

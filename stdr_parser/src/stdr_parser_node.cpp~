@@ -124,13 +124,13 @@ namespace stdr_parser
   */
   void Node::unallocateChildren(void)
   {
-    for(unsigned int i = 0 ; i < elements.size() ; i++)
-    {
 
+  
+    for(unsigned int i = 0 ; i < elements.size() ; i++)
+    {     
       delete elements[i];
-      
+      elements.erase(elements.begin() + i);
     }
-    ROS_INFO("elements are %d", elements.size());
   }
 
   

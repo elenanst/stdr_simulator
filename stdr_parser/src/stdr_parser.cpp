@@ -59,7 +59,7 @@ namespace stdr_parser
       }
       //~ base_node_->printParsedXml(base_node_,"");
       std::string base_path_ = ros::package::getPath("stdr_resources");
-      std::string path_with_file_=base_path_ +  std::string("/resources/specifications/stdr_multiple_allowed.xml");
+      std::string path_with_file_ = base_path_ +  std::string("/resources/specifications/stdr_multiple_allowed.xml");
       Validator::parseMergableSpecifications(path_with_file_);
       
       while(!eliminateFilenames(base_node_));
@@ -91,7 +91,7 @@ namespace stdr_parser
   /**
   @brief Recursive function - Expands the 'filename' nodes and eliminates them
   @param n [Node*] The stdr xml tree node to begin
-  @return bool : True is a 'filename' node was expanded
+  @return bool : False is a 'filename' node was expanded
   **/
   bool Parser::eliminateFilenames(Node* n)
   {
@@ -156,13 +156,12 @@ filename of wrong type specified\n") +
         break;
       }
     }
-    
     if(pure_values)
     {
       //!< Unique value child
       if(n->elements.size() <= 1)
       {
-        return;
+        return ;
       }
       
       //!< Multiple value childer. Find min priority
@@ -179,6 +178,7 @@ filename of wrong type specified\n") +
       Node* proper_child = n->elements[index];
       n->elements.clear();
       n->elements.push_back(proper_child);
+      return ;
     }
     else
     {
@@ -187,12 +187,13 @@ filename of wrong type specified\n") +
         mergeNodesValues(n->elements[i]);
       }
     }
+    return ;
   }
 
   /**
   @brief Recursive function - Merges the nodes that do not exist in non_mergable_tags_
   @param n [Node*] The stdr xml tree node to begin
-  @return bool : True is a ndoe was merged
+  @return bool : False is a node was merged
   **/
   bool Parser::mergeNodes(Node* n)
   {
@@ -208,15 +209,15 @@ filename of wrong type specified\n") +
         continue;
       }
       std::string tag = n->elements[i]->tag;
-      
-      //!< Child is a mergable tag
-      if(Validator::getNonMergableTags().find(tag) == Validator::getNonMergableTags().end())
-      {
+      std::set<std::string> container = Validator::getNonMergableTags(); 
+     if(container.find(tag) == container.end())
+     {
         std::vector<int> num = n->getTag(tag);
-        
+
         //!< Multiple mergable tags
         if(num.size() != 1) 
         { 
+
           for(int i = num.size()-1 ; i > 0 ; i --)
           {
             //!< Merging multiple tag's children into the first occurence
@@ -228,6 +229,7 @@ filename of wrong type specified\n") +
             }
             n->elements.erase(n->elements.begin() + num[i]);
           }
+          
           return false;
         }
       }

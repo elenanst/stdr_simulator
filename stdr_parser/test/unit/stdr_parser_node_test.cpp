@@ -25,11 +25,12 @@ namespace stdr_parser
 {
 
 /**
- * @class XmlParserTest
+ * @class ParserNodeTest
  * @brief Basic Test Fixture for testing XmlParser
  */
 class ParserNodeTest : public ::testing::Test
 {
+
 protected:
   void init(const std::string& filename)
   {
@@ -46,13 +47,13 @@ protected:
   std::string readFile(const std::string& file)
   {
     std::ostringstream output_stream;
-      std::ostringstream output_stream_2;
     std::ifstream inFile (file.c_str());
     std::string line;
     while( getline(inFile, line) ) {
         output_stream << line << std::endl;
     } 
-    return output_stream.str();
+    std::string content = output_stream.str().substr(0, output_stream.str().size()-1);
+    return content;
   }
 
 
@@ -63,43 +64,69 @@ protected:
 
 TEST_F(ParserNodeTest, printParsedXmlNoIndent)
 {
+
+  init(std::string("/test/files/elements/Noise.xml"));
   std::ostringstream output_stream_;
-  init(std::string("/test/files/elements/noise_gauss.xml"));
+  
+  //parse file into node
   XmlParser::parse(utils_file_, root_node_);
   std::string indent = "" ;
+
+  //get the xml content of file into string
   std::string tree = root_node_->printParsedXml(root_node_, indent, output_stream_);
-  tree+="\n";
+ 
+  //get expected output 
   init("/test/files/elements/Noise_tree.txt");
   std::string expected_tree = readFile(utils_file_);
-  EXPECT_STREQ(tree.c_str(), expected_tree.c_str());
+
+  //test if printParsedXml prints as expected
+  EXPECT_STREQ(expected_tree.c_str(), tree.c_str());
 
 }
 
 TEST_F(ParserNodeTest, printParsedXmlIndent)
 {
+  init(std::string("/test/files/elements/Noise.xml"));
   std::ostringstream output_stream_;
-  init(std::string("/test/files/elements/noise_gauss.xml"));
+  
+  //parse file into node
   XmlParser::parse(utils_file_, root_node_);
   std::string indent = "&" ;
+
+  //get the xml content of file into string
   std::string tree = root_node_->printParsedXml(root_node_, indent, output_stream_);
+
+  //get expected output 
   init("/test/files/elements/Noise_tree_Indent.txt");
   std::string expected_tree = readFile(utils_file_);
-  EXPECT_STREQ(tree.c_str(), expected_tree.c_str());
+
+  //test if printParsedXml prints as expected
+  EXPECT_STREQ(expected_tree.c_str(), tree.c_str());
 }
 
 TEST_F(ParserNodeTest, increasePriority)
 {
-  init(std::string("/test/files/elements/element_ex_CO2Sensor.xml"));
+  init(std::string("/test/files/elements/CO2Sensor.xml"));
+
+  //parse file into node
   XmlParser::parse(utils_file_, root_node_);
-  int priority = root_node_->priority;;
+
+  //get current priorities
   int length =  root_node_->elements.size();
-  int* priorities= new int[length];
+  int* priorities = new int[length];
+  int priority = root_node_->priority;
   for(unsigned int i = 0 ; i < root_node_->elements.size() ; i++)
   {
       priorities[i] = root_node_->elements[i]->priority;
   }
+
+  //increase priority of node
   root_node_->increasePriority();
+
+  //test priority of node
   EXPECT_EQ(root_node_->priority, priority +1 );
+
+  //test priorities of children of node
   for(unsigned int i = 0 ; i < root_node_->elements.size() ; i++)
   {
       EXPECT_EQ(root_node_->elements[i]->priority,priorities[i]+1);
@@ -108,48 +135,80 @@ TEST_F(ParserNodeTest, increasePriority)
 
 TEST_F(ParserNodeTest, getTagRightTag)
 {
-  init(std::string("/test/files/elements/element_ex_LaserSensor.xml"));
+  init(std::string("/test/files/elements/LaserSensor.xml"));
+
+  //parse file into node
   XmlParser::parse(utils_file_, root_node_);
+
+  //get indexes of tag "laser_specifications" 
   std::vector<int> indexes = root_node_->elements[0]->getTag("laser_specifications");
+
+  //check if number of indexes is correct
   EXPECT_EQ(indexes.size(),1);
+  
+  //check if index is correct
   EXPECT_EQ(indexes.at(0),0);
 }
 
 TEST_F(ParserNodeTest, getTagMultipleOccurence)
 {
-  init(std::string("/test/files/elements/element_ex_LaserSensor_multiple.xml"));
+  init(std::string("/test/files/elements/LaserSensor_multiple.xml"));
+
+  //parse file into node
   XmlParser::parse(utils_file_, root_node_);
+
+  //get indexes of tag "max_angle" 
   std::vector<int> indexes = root_node_->elements[0]->elements[0]->getTag("max_angle");
+
+  //check if number of indexes is correct
   EXPECT_EQ(indexes.size(),2);
+
+  //check if indexes are correct
   EXPECT_EQ(indexes.at(0),2);
   EXPECT_EQ(indexes.at(1),3);
 }
 
 TEST_F(ParserNodeTest, getTagEmpty)
 {
-  init(std::string("/test/files/elements/element_ex_SonarSensor.xml"));
+  init(std::string("/test/files/elements/SonarSensor.xml"));
+
+  //parse file into node
   XmlParser::parse(utils_file_, root_node_);
+
+  //get indexes of tag "max_angle" 
   std::vector<int> indexes = root_node_->elements[0]->getTag("theta");
+
+  //check if number of indexes is correct
   EXPECT_EQ(indexes.size(),0);
 }
 
-//provlima: kaleitai polles fores h unallocateChildren
 TEST_F(ParserNodeTest, unallocateChildren)
 {
-  init(std::string("/test/files/elements/noise_gauss.xml"));
+  init(std::string("/test/files/elements/Noise.xml"));
+
+  //parse file into node
   XmlParser::parse(utils_file_, root_node_);
+
+  //unallocate children of node
   unallocateChildren(root_node_);
-  EXPECT_EQ(root_node_->elements.size(),0);
+
+  //check if children have been unallocated
+  EXPECT_TRUE(root_node_->elements.empty());
 }
-/* den eimai sigouri ti kanei auti i sunartisi
+
+//not tested properly
 TEST_F(ParserNodeTest,checkForFilenameTrue)
 {
   init(std::string("/test/files/test_robot_1.xml"));
+
+  //parse file into node
   XmlParser::parse(utils_file_, root_node_);
-  std::string filename = "robots/too_simple_robot.xml" ;
-  std::string tag = root_node_->value;
-  ROS_INFO("tag is %s", tag.c_str()  );
+
+
+  std::string filename = "robot" ;
+
+  //check if element has tag robot
   EXPECT_TRUE(root_node_->elements[0]->elements[0]->checkForFilename(filename));
 }
-*/
+
 }
