@@ -112,18 +112,18 @@ class ValidatorTest : public ::testing::Test
   
   void validityRequiredCheck(std::string file_name, Node* n)
   {
-    Validator::validityRequiredCheck(file_name,n);
+    validator_.validityRequiredCheck(file_name,n);
   }
 
   void validate(std::string file_name, Node* n)
   {
-    Validator::validate(file_name,n);
+    validator_.validate(file_name,n);
   }
 
   // Variables
   std::string specs_file_;
   Node* dummy_node_;
-
+  Validator validator_;
 };
 
 TEST_F(ValidatorTest, parseMergableSpecificationsNoThrow)
@@ -131,7 +131,7 @@ TEST_F(ValidatorTest, parseMergableSpecificationsNoThrow)
   init(std::string("/test/files/stdr_multiple_allowed.xml"));
 
   //parse stdr_multiple_allowed.xml
-  EXPECT_NO_THROW(Validator::parseMergableSpecifications(specs_file_));
+  EXPECT_NO_THROW(validator_.parseMergableSpecifications(specs_file_));
 
 }
 
@@ -142,7 +142,7 @@ TEST_F(ValidatorTest, parseMergableSpecificationsRightTags)
   init(std::string("/test/files/stdr_multiple_allowed.xml"));
 
   //parse stdr_multiple_allowed.xml to get non_mergable_tags
-  std::set<std::string> non_mergable_tags = Validator::parseMergableSpecifications(specs_file_);
+  std::set<std::string> non_mergable_tags = validator_.parseMergableSpecifications(specs_file_);
 
   //fill non_mergable_tags_test as defined in stdr_multiple_allowed.xml
   std::string tags[] = {"robot","laser","sonar","rfid_reader","point","co2_sensor","thermal_sensor","sound_sensor"};
@@ -212,26 +212,6 @@ TEST_F(ValidatorTest,validityAllowedCheckTagNoThrow)
   EXPECT_NO_THROW(validityAllowedCheck(file_name,dummy_node_));
 }
 
-TEST_F(ValidatorTest,validityAllowedCheckTagNoThrow2)
-{
-  TiXmlDocument test_doc = loadStdrSpecifications();
-
-   //parse specifications
-  std::map<std::string,ElSpecs> specs_map = parseSpecifications(&test_doc);
-  dummy_node_ = new Node();
-  dummy_node_->tag = "map";
-  std::string tags[] = {"filename","map_specifications"};
-  std::set<std::string> tags_set(tags, tags + sizeof(tags) / sizeof(tags[0]));
-  for(std::set<std::string>::const_iterator it = tags_set.begin(); it != tags_set.end(); ++it)
-  {
-    Node* new_node=new Node();
-    new_node->tag=*it;
-    dummy_node_->elements.push_back(new_node);
-  }
-  std::string file_name="";
-  //check if tag node passes validityAllowedCheck
-  EXPECT_NO_THROW(validityAllowedCheck(file_name,dummy_node_));
-}
 
 TEST_F(ValidatorTest,validityAllowedCheckTagThrow)
 {
@@ -342,7 +322,7 @@ TEST_F(ValidatorTest,validateTagNoThrow)
 TEST_F(ValidatorTest,clearSpecsIsEmpty)
 {
   Specs specs;
-  Specs returned = Validator::clearSpecs();
+  Specs returned = validator_.clearSpecs();
   EXPECT_EQ(specs,returned);
 }
 

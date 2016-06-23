@@ -73,13 +73,13 @@ TEST_F(ParserNodeTest, printParsedXmlNoIndent)
   std::string indent = "" ;
 
   //get the xml content of file into string
-  std::string tree = root_node_->printParsedXml(root_node_, indent, output_stream_);
+  std::string tree = root_node_->printParsedFile(indent, output_stream_);
  
   //get expected output 
   init("/test/files/elements/Noise_tree.txt");
   std::string expected_tree = readFile(utils_file_);
 
-  //test if printParsedXml prints as expected
+  //test if printParsedFile prints as expected
   EXPECT_STREQ(expected_tree.c_str(), tree.c_str());
 
 }
@@ -94,13 +94,13 @@ TEST_F(ParserNodeTest, printParsedXmlIndent)
   std::string indent = "&" ;
 
   //get the xml content of file into string
-  std::string tree = root_node_->printParsedXml(root_node_, indent, output_stream_);
+  std::string tree = root_node_->printParsedFile(indent, output_stream_);
 
   //get expected output 
   init("/test/files/elements/Noise_tree_Indent.txt");
   std::string expected_tree = readFile(utils_file_);
 
-  //test if printParsedXml prints as expected
+  //test if printParsedFile prints as expected
   EXPECT_STREQ(expected_tree.c_str(), tree.c_str());
 }
 

@@ -1,5 +1,5 @@
 robot: 
-  filename: robots/too_simple_robot.yaml
+  filename: too_simple_robot.yaml
   robot_specifications: 
     - footprint: 
         footprint_specifications: 

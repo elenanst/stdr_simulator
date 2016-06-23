@@ -26,6 +26,7 @@ namespace stdr_parser
   
   //!< Static initializations
   Node* Parser::base_node_ = new Node();
+  Validator Parser::validator_;
   
   /**
   @brief Default constructor
@@ -57,26 +58,30 @@ namespace stdr_parser
       {
         YamlParser::parse(file_name,base_node_);
       }
-      //~ base_node_->printParsedXml(base_node_,"");
+      else
+      
+{ROS_INFO("0");}
       std::string base_path_ = ros::package::getPath("stdr_resources");
       std::string path_with_file_ = base_path_ +  std::string("/resources/specifications/stdr_multiple_allowed.xml");
-      Validator::parseMergableSpecifications(path_with_file_);
+      validator_.parseMergableSpecifications(path_with_file_);
       
       while(!eliminateFilenames(base_node_));
       while(!mergeNodes(base_node_));
       mergeNodesValues(base_node_);
       
-      Validator::validate(file_name, base_node_);
+      validator_.validate(file_name, base_node_);
       
       //!< Uncomment to see the internal tree structure
       //~ base_node_->printParsedXml(base_node_,"");
     }
     catch(ParserException ex)
     {
+ROS_INFO("1");
       throw ex;
     }
     catch(YAML::ParserException& e)
     {
+ROS_INFO("6");
       std::string error = 
         std::string("Failed to load file '") + 
         file_name + std::string("'") +
@@ -132,6 +137,7 @@ filename of wrong type specified\n") +
         }
         catch(ParserException ex)
         {
+ROS_INFO("2");
           throw ex;
         }
       }
@@ -209,7 +215,7 @@ filename of wrong type specified\n") +
         continue;
       }
       std::string tag = n->elements[i]->tag;
-      std::set<std::string> container = Validator::getNonMergableTags(); 
+      std::set<std::string> container = validator_.getNonMergableTags(); 
      if(container.find(tag) == container.end())
      {
         std::vector<int> num = n->getTag(tag);

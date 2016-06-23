@@ -102,28 +102,28 @@ class ValidatorTest : public ::testing::Test
   // Accessors for private methods of Validator
   std::map<std::string,ElSpecs> parseSpecifications(TiXmlNode* node)
   {
-    return Validator::parseSpecifications(node);
+    return validator_.parseSpecifications(node);
   }
 
   void validityAllowedCheck(std::string file_name, Node* n)
   {
-    Validator::validityAllowedCheck(file_name,n);
+    validator_.validityAllowedCheck(file_name,n);
   }
   
   void validityRequiredCheck(std::string file_name, Node* n)
   {
-    Validator::validityRequiredCheck(file_name,n);
+    validator_.validityRequiredCheck(file_name,n);
   }
 
   void validate(std::string file_name, Node* n)
   {
-    Validator::validate(file_name,n);
+    validator_.validate(file_name,n);
   }
 
   // Variables
   std::string specs_file_;
   Node* dummy_node_;
-
+  Validator validator_;
 };
 
 TEST_F(ValidatorTest, parseMergableSpecificationsNoThrow)
@@ -131,7 +131,7 @@ TEST_F(ValidatorTest, parseMergableSpecificationsNoThrow)
   init(std::string("/test/files/stdr_multiple_allowed.xml"));
 
   //parse stdr_multiple_allowed.xml
-  EXPECT_NO_THROW(Validator::parseMergableSpecifications(specs_file_));
+  EXPECT_NO_THROW(validator_.parseMergableSpecifications(specs_file_));
 
 }
 
@@ -142,7 +142,7 @@ TEST_F(ValidatorTest, parseMergableSpecificationsRightTags)
   init(std::string("/test/files/stdr_multiple_allowed.xml"));
 
   //parse stdr_multiple_allowed.xml to get non_mergable_tags
-  std::set<std::string> non_mergable_tags = Validator::parseMergableSpecifications(specs_file_);
+  std::set<std::string> non_mergable_tags = validator_.parseMergableSpecifications(specs_file_);
 
   //fill non_mergable_tags_test as defined in stdr_multiple_allowed.xml
   std::string tags[] = {"robot","laser","sonar","rfid_reader","point","co2_sensor","thermal_sensor","sound_sensor"};
@@ -322,7 +322,7 @@ TEST_F(ValidatorTest,validateTagNoThrow)
 TEST_F(ValidatorTest,clearSpecsIsEmpty)
 {
   Specs specs;
-  Specs returned = Validator::clearSpecs();
+  Specs returned = validator_.clearSpecs();
   EXPECT_EQ(specs,returned);
 }
 

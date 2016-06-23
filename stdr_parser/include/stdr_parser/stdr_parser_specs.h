@@ -73,10 +73,10 @@ namespace stdr_parser
     
     
     //!< std::map of valid STDR tags
-    static std::map<std::string,ElSpecs> specs;
+    std::map<std::string,ElSpecs> specs;
     
     //!< List of non-mergable tags. Read from stdr_multiple_allowed.xml
-    static std::set<std::string> non_mergable_tags;
+    std::set<std::string> non_mergable_tags;
   };
 }
 

@@ -25,7 +25,7 @@ namespace stdr_parser
 {
 
 
-   Specs specs_struct;
+  Specs Validator::specs_struct;
 
   /**
   @brief Default constructor
@@ -52,15 +52,15 @@ namespace stdr_parser
       return;
     }
     std::string tag = n->tag;
-    ROS_INFO("erlaubt ist %s", specs_struct.specs.find("robot"));
     if(specs_struct.specs.find(tag) == specs_struct.specs.end() &&
       tag != "STDR_Parser_Root_Node")
     {
-      ROS_INFO("problem 1");
+      
       std::string error = 
         std::string("STDR parser : ") + n->tag + 
         std::string(" is not a valid tag") + 
         std::string("\nTrail: ");
+    ROS_INFO("from allowed 1 + %s",error.c_str());
       throw ParserException(error);
     }
     for(unsigned int i = 0 ; i < n->elements.size() ; i++)
@@ -72,7 +72,6 @@ namespace stdr_parser
         if(specs_struct.specs[tag].allowed.find(child_tag) == 
           specs_struct.specs[tag].allowed.end())
         {
-          ROS_INFO("problem 2");
           int decreaser = (extractFilename(n->elements[i]->file_origin) == 
           extractFilename(file_name) ? 1 : 0);
           std::string error = 
@@ -84,6 +83,7 @@ namespace stdr_parser
             std::string(" of file '") + 
             extractFilename(n->elements[i]->file_origin) + 
             std::string("'");
+ROS_INFO("from allowed 2 + %s",error.c_str());
           throw ParserException(error);
         }
       }
@@ -97,6 +97,7 @@ namespace stdr_parser
         {
           throw ex;
         }
+
         int decreaser = (extractFilename(n->file_origin) == 
           extractFilename(file_name) ? 1 : 0);
         std::string trail(ex.what());
@@ -104,7 +105,9 @@ namespace stdr_parser
           SSTR( n->file_row - decreaser) + 
           std::string(" of file '") + 
           extractFilename(n->file_origin) + std::string("'");
+ROS_INFO("from allowed 3 + %s",trail.c_str());
         ParserException ex_new(trail);
+
         throw ex_new;
       }
     }
@@ -132,6 +135,7 @@ namespace stdr_parser
         std::string("STDR parser : ") + n->tag + 
         std::string(" is not a valid tag") + 
         std::string("\nTrail: ");
+ROS_INFO("from reuiqred 1 + %s",error.c_str());
       throw ParserException(error);
     }
     for(std::set<std::string>::iterator it = specs_struct.specs[tag].required.begin() 
@@ -144,6 +148,7 @@ namespace stdr_parser
           std::string("STDR parser : ") + tag + 
           std::string(" requires ") + (*it) +
           std::string("\nTrail: ");
+ROS_INFO("from reuiqred 2 + %s",error.c_str());
         throw ParserException(error);
       }
     }
@@ -168,6 +173,7 @@ namespace stdr_parser
           SSTR( n->file_row - decreaser ) + 
           std::string(" of file '") + extractFilename(n->file_origin) 
           + std::string("'");
+ROS_INFO("from reuiqred 3 + %s",trail.c_str());
         ParserException ex_new(trail);
         throw ex_new;
       }
@@ -328,6 +334,7 @@ namespace stdr_parser
     }
     catch(ParserException ex)
     {
+ROS_INFO("yoo");
       throw ex;
     }
   }

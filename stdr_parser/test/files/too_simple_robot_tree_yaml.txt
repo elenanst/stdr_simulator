@@ -1,0 +1,11 @@
+-STDR_Parser_Root_Node'  (0) - too_simple_robot.yaml
+| -robot'  (0) - too_simple_robot.yaml
+| | -robot_specifications'  (0) - too_simple_robot.yaml
+| | | -initial_pose'  (0) - too_simple_robot.yaml
+| | | | -theta'  (0) - too_simple_robot.yaml
+| | | | | -0'  (0) - too_simple_robot.yaml
+| | | | -x'  (0) - too_simple_robot.yaml
+| | | | | -0'  (0) - too_simple_robot.yaml
+| | | | -y'  (0) - too_simple_robot.yaml
+| | | | | -0'  (0) - too_simple_robot.yaml
+

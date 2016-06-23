@@ -29,8 +29,8 @@ namespace stdr_parser
 
 
 /**
- * @class ValidatorTest
- * @brief Basic Test Fixture for testing Validator
+ * @class XmlFileWriterTest
+ * @brief Basic Test Fixture for testing XmlFileWriter
  */
 class XmlFileWriterTest : public ::testing::Test
 {
@@ -72,7 +72,7 @@ public:
      content.erase(std::remove(content.begin(), content.end(), '\n'), content.end());
 
      return content;
- }
+  }
 
  std::string utils_file_;
   
@@ -678,8 +678,8 @@ TEST_F(XmlFileWriterTest, messageToFileNoise)
   els.values=values;
   createMessage(&msg, els);
 
-  //convert message to xml element and save
-  XmlFileWriter::messageToFile<>(msg, utils_file_);
+  //save message to file
+  saveMessage(T msg,std::string file_name)
   std::string element = readFile(utils_file_);
   init("/test/files/elements/Noise_element_exp.xml");
 

@@ -42,6 +42,10 @@ namespace stdr_parser
   {
     private:
       
+
+      //Validator Object 
+      Validator validator_;
+
       //!< Base node of the parsed file
       static Node* base_node_;
       
@@ -71,7 +75,7 @@ namespace stdr_parser
       @param n [Node*] The stdr xml tree node to begin
       @return void
       **/
-      static bool mergeNodesValues(Node* n);
+      static void mergeNodesValues(Node* n);
       
       /**
       @brief Default constructor

@@ -1,0 +1,65 @@
+-STDR_Parser_Root_Node'  (0) - test_robot_1.yaml
+| -robot'  (0) - test_robot_1.yaml
+| | -robot_specifications'  (0) - test_robot_1.yaml
+| | | -footprint'  (0) - test_robot_1.yaml
+| | | | -footprint_specifications'  (0) - test_robot_1.yaml
+| | | | | -radius'  (0) - test_robot_1.yaml
+| | | | | | -0.05'  (0) - test_robot_1.yaml
+| | | -initial_pose'  (0) - test_robot_1.yaml
+| | | | -y'  (0) - test_robot_1.yaml
+| | | | | -2'  (0) - test_robot_1.yaml
+| | | | -x'  (0) - test_robot_1.yaml
+| | | | | -3'  (0) - test_robot_1.yaml
+| | | | -theta'  (0) - test_robot_1.yaml
+| | | | | -1.57'  (0) - test_robot_1.yaml
+| | | -laser'  (0) - test_robot_1.yaml
+| | | | -laser_specifications'  (0) - test_robot_1.yaml
+| | | | | -pose'  (0) - test_robot_1.yaml
+| | | | | -theta'  (0) - test_robot_1.yaml
+| | | | | | --3.1415'  (0) - test_robot_1.yaml
+| | | | -filename'  (0) - hokuyo_URG_04LX.yaml
+| | | | | -laser'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | -laser_specifications'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | -min_range'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | | -0.06'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | -frequency'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | | -10'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | -max_angle'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | | -2.09439510239'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | -num_rays'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | | -667'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | -pose'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | | -theta'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | | | -0'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | | -y'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | | | -0'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | | -x'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | | | -0'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | -min_angle'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | | --2.09439510239'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | -noise'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | | -filename'  (0) - noise_gauss.yaml
+| | | | | | | | | -noise'  (0) - noise_gauss.yaml
+| | | | | | | | | | -noise_specifications'  (0) - noise_gauss.yaml
+| | | | | | | | | | | -noise_mean'  (0) - noise_gauss.yaml
+| | | | | | | | | | | | -0.1'  (0) - noise_gauss.yaml
+| | | | | | | | | | | -noise_std'  (0) - noise_gauss.yaml
+| | | | | | | | | | | | -0.01'  (0) - noise_gauss.yaml
+| | | | | | | | -noise_specifications'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | | | -noise_mean'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | | | | -0.5'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | | | -noise_std'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | | | | -0.05'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | -max_range'  (0) - hokuyo_URG_04LX.yaml
+| | | | | | | | -4.09'  (0) - hokuyo_URG_04LX.yaml
+| | -filename'  (0) - too_simple_robot.yaml
+| | | -robot'  (0) - too_simple_robot.yaml
+| | | | -robot_specifications'  (0) - too_simple_robot.yaml
+| | | | | -initial_pose'  (0) - too_simple_robot.yaml
+| | | | | | -y'  (0) - too_simple_robot.yaml
+| | | | | | | -0'  (0) - too_simple_robot.yaml
+| | | | | | -theta'  (0) - too_simple_robot.yaml
+| | | | | | | -0'  (0) - too_simple_robot.yaml
+| | | | | | -x'  (0) - too_simple_robot.yaml
+| | | | | | | -0'  (0) - too_simple_robot.yaml
+

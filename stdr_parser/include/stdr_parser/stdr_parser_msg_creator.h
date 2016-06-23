@@ -47,7 +47,8 @@ namespace stdr_parser
       **/
       MessageCreator(void);
   
-
+        //Validator Object 
+      static Validator validator_;
     public:
       
       /**

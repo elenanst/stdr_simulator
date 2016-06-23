@@ -58,7 +58,7 @@ namespace stdr_parser
 #ifndef HAVE_NEW_YAMLCPP
     base_node->file_row = doc.GetMark().line;
 #endif
-    
+ 
     parseLow(doc,base_node);
   }
   

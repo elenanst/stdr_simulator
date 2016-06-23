@@ -29,8 +29,8 @@ namespace stdr_parser
 
 
 /**
- * @class ValidatorTest
- * @brief Basic Test Fixture for testing Validator
+ * @class XmlFileWriterTest
+ * @brief Basic Test Fixture for testing XmlFileWriter
  */
 class XmlFileWriterTest : public ::testing::Test
 {

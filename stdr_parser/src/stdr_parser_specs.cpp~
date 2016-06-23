@@ -73,7 +73,6 @@ namespace stdr_parser
        output << *it;   
     }
     output << elspecs.default_value;
-    std::cout<<output;
     return output;   
   }
 }

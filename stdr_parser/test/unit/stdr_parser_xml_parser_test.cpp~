@@ -148,7 +148,7 @@ TEST_F(XmlParserTest, parseLow)
     std::string tree = root_node_->printParsedXml(root_node_, indent, output_stream);
 
     //read expected tree
-    init(std::string("/test/files/test_robot_1_tree.txt));
+    init(std::string("/test/files/test_robot_1_tree.txt"));
     std::string expected_tree = readFile(robot_file_);
     EXPECT_STREQ(expected_tree.c_str(), tree.c_str());
     
