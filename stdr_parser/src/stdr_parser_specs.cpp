@@ -46,4 +46,14 @@ namespace stdr_parser
   {
     specs.clear();
   }
+
+  bool Specs::operator== (const Specs& rhs) const
+  {
+    return specs == rhs.specs && non_mergable_tags == rhs.non_mergable_tags;
+  }
+
+  bool ElSpecs::operator== (const ElSpecs& rhs) const
+  {
+    return required == rhs.required && allowed == rhs.allowed && default_value == rhs.default_value;
+  }
 }
