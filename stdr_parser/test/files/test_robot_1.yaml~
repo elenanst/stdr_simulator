@@ -1,6 +1,0 @@
-robot: 
-  robot_specifications: 
-    - initial_pose: 
-        x: 25
-        y: 23
-        theta: -3.14
