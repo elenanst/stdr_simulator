@@ -54,9 +54,17 @@ public:
     
   }
 
+  void initTempFile(const std::string& type)
+  {
+   std::string filename = "/tmp/tmpfileXXXXXX" + type;
+   temp_file_ = strdup(filename.c_str());
+   mkstemp(temp_file_);
+  }
+
   void init(const std::string& filename)
   {
     utils_file_ = ros::package::getPath("stdr_parser") +
+                    "/test/files/XmlFileWriter/" +
                     filename;
   }
 
@@ -75,6 +83,7 @@ public:
   }
 
  std::string utils_file_;
+ char* temp_file_;
   
 };
 
@@ -221,7 +230,8 @@ void XmlFileWriterTest::createMessage<stdr_msgs::SoundSensorMsg>(stdr_msgs::Soun
 }
 
 template <>
-void XmlFileWriterTest::createMessage<stdr_msgs::KinematicMsg>(stdr_msgs::KinematicMsg*  msg, const sub_elements els)
+void XmlFileWriterTest::createMessage<stdr_msgs::KinematicMsg>(stdr_msgs::KinematicMsg*  msg,
+const sub_elements els)
 {
   msg->type = els.values[0]; 
   msg->a_ux_ux = atoi(els.values[1].c_str());
@@ -303,11 +313,9 @@ void XmlFileWriterTest::createMessage<stdr_msgs::RobotMsg>(stdr_msgs::RobotMsg* 
 
 TEST_F(XmlFileWriterTest, messageToXmlElementNoise)
 {
-  init("/test/files/elements/element.xml");
-
-  //create message
+   //create message
   stdr_msgs::Noise msg;
-  std::string values[] = {"1", "2", "0.2"};
+  std::string values[] = {"1", "5", "0"};
   sub_elements els;
   els.values=values;
   createMessage(&msg, els);
@@ -315,13 +323,12 @@ TEST_F(XmlFileWriterTest, messageToXmlElementNoise)
   //convert message to xml element and save
   TiXmlDocument doc;
   XmlFileWriter::messageToXmlElement<>(msg, &doc);
-  doc.SaveFile(utils_file_.c_str());
-
-  //read element to string
-  std::string element = readFile(utils_file_);
+  initTempFile(".xml"); 
+  doc.SaveFile(temp_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected string
-  init("/test/files/elements/Noise_element_exp.xml");
+  init("Noise_element_exp.xml");
   std::string expected_element = readFile(utils_file_);
 
   EXPECT_STREQ(expected_element.c_str(), element.c_str());
@@ -329,7 +336,7 @@ TEST_F(XmlFileWriterTest, messageToXmlElementNoise)
 
 TEST_F(XmlFileWriterTest, messageToXmlElementFootprint)
 {
-  init("/test/files/elements/element.xml");
+
 
   //create message
   stdr_msgs::FootprintMsg msg;
@@ -350,20 +357,18 @@ TEST_F(XmlFileWriterTest, messageToXmlElementFootprint)
   //convert message to xml element and save
   TiXmlDocument doc;
   XmlFileWriter::messageToXmlElement<>(msg, &doc);
-  doc.SaveFile(utils_file_.c_str());
-  
-  //read element to string
-  std::string element = readFile(utils_file_);
+  initTempFile(".xml"); 
+  doc.SaveFile(temp_file_);
+  std::string element =readFile(std::string(temp_file_));
   
   //read expected string
-  init("/test/files/elements/Footprint_element_exp.xml");
+  init("Footprint_element_exp.xml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }
 
 TEST_F(XmlFileWriterTest, messageToXmlElementPose2D)
 {
-  init("/test/files/elements/element.xml");
 
   //create message
   geometry_msgs::Pose2D msg;
@@ -375,22 +380,19 @@ TEST_F(XmlFileWriterTest, messageToXmlElementPose2D)
   //convert message to xml element and save
   TiXmlDocument doc;
   XmlFileWriter::messageToXmlElement<>(msg, &doc);
-  doc.SaveFile(utils_file_.c_str());
-
-  //read element to string
-  std::string element = readFile(std::string(utils_file_.c_str()));
+  initTempFile(".xml"); 
+  doc.SaveFile(temp_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected string
-  init("/test/files/elements/Pose2D_element_exp.xml");
+  init("Pose2D_element_exp.xml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(element.c_str(), expected_element.c_str());
 }
 
 TEST_F(XmlFileWriterTest, messageToXmlElementLaserSensor)
 {
-  init("/test/files/elements/element.xml");
-
-  //create message
+    //create message
   stdr_msgs::LaserSensorMsg msg;
   std::string values[] = {"50", "20", "5", "2", "10", "25", "2"};
   sub_elements els;
@@ -409,9 +411,11 @@ TEST_F(XmlFileWriterTest, messageToXmlElementLaserSensor)
   //convert message to xml element and save
   TiXmlDocument doc;
   XmlFileWriter::messageToXmlElement<>(msg, &doc);
-  doc.SaveFile(utils_file_.c_str());
-  std::string element = readFile(utils_file_);
-  init("/test/files/elements/LaserSensor_element_exp.xml");
+  initTempFile(".xml"); 
+  doc.SaveFile(temp_file_);
+  std::string element = readFile(std::string(temp_file_));
+
+  init("LaserSensor_element_exp.xml");
 
   //read expected elements
   std::string expected_element = readFile(utils_file_);
@@ -420,8 +424,6 @@ TEST_F(XmlFileWriterTest, messageToXmlElementLaserSensor)
 
 TEST_F(XmlFileWriterTest, messageToXmlElementSonarSensor)
 { 
-  init("/test/files/elements/element.xml");
-
   //create message
   stdr_msgs::SonarSensorMsg msg;
   std::string values[] = {"5", "2", "5", "2", "2"};
@@ -441,19 +443,18 @@ TEST_F(XmlFileWriterTest, messageToXmlElementSonarSensor)
   //convert message to xml element and save
   TiXmlDocument doc;
   XmlFileWriter::messageToXmlElement<>(msg, &doc);
-  doc.SaveFile(utils_file_.c_str());
-  std::string element = readFile(utils_file_);
+  initTempFile(".xml"); 
+  doc.SaveFile(temp_file_);
+  std::string element = readFile(std::string(temp_file_));
 
     //read expected element
-  init("/test/files/elements/SonarSensor_element_exp.xml");
+  init("SonarSensor_element_exp.xml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }
 
 TEST_F(XmlFileWriterTest, messageToXmlElementRfidSensor)
 { 
-  init("/test/files/elements/element.xml");
-
   //create message
   stdr_msgs::RfidSensorMsg msg;
   std::string values[] = {"5", "2", "5", "2", "2"};
@@ -468,19 +469,18 @@ TEST_F(XmlFileWriterTest, messageToXmlElementRfidSensor)
   //convert message to xml element and save
   TiXmlDocument doc;
   XmlFileWriter::messageToXmlElement<>(msg, &doc);
-  doc.SaveFile(utils_file_.c_str());
-  std::string element = readFile(utils_file_);
+  initTempFile(".xml"); 
+  doc.SaveFile(temp_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected element
-  init("/test/files/elements/RfidSensor_element_exp.xml");
+  init("RfidSensor_element_exp.xml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(element.c_str(), expected_element.c_str());
 }
 
 TEST_F(XmlFileWriterTest, messageToXmlElementCO2Sensor)
 { 
-  init("/test/files/elements/element.xml");
-
   //create message
   stdr_msgs::CO2SensorMsg  msg;
   std::string values[] = {"5", "2", "5"};
@@ -495,18 +495,18 @@ TEST_F(XmlFileWriterTest, messageToXmlElementCO2Sensor)
   //convert message to xml element and save
   TiXmlDocument doc;
   XmlFileWriter::messageToXmlElement<>(msg, &doc);
-  doc.SaveFile(utils_file_.c_str());
-  std::string element = readFile(utils_file_);
+  initTempFile(".xml"); 
+  doc.SaveFile(temp_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected element
-  init("/test/files/elements/CO2Sensor_element_exp.xml");
+  init("CO2Sensor_element_exp.xml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(element.c_str(), expected_element.c_str());
 }
 
 TEST_F(XmlFileWriterTest, messageToXmlElementThermalSensor)
 { 
-  init("/test/files/elements/element.xml");
 
   //create message
   stdr_msgs::ThermalSensorMsg  msg;
@@ -522,19 +522,18 @@ TEST_F(XmlFileWriterTest, messageToXmlElementThermalSensor)
   //convert message to xml element and save
   TiXmlDocument doc;
   XmlFileWriter::messageToXmlElement<>(msg, &doc);
-  doc.SaveFile(utils_file_.c_str());
-  std::string element = readFile(utils_file_);
+  initTempFile(".xml"); 
+  doc.SaveFile(temp_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected element
-  init("/test/files/elements/ThermalSensor_element_exp.xml");
+  init("ThermalSensor_element_exp.xml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(element.c_str(), expected_element.c_str());
 }
 
 TEST_F(XmlFileWriterTest, messageToXmlElementSoundSensor)
 { 
-  init("/test/files/elements/element.xml");
-
   //create message
   stdr_msgs::SoundSensorMsg  msg;
   std::string values[] = {"5", "2", "5","3"};
@@ -549,19 +548,18 @@ TEST_F(XmlFileWriterTest, messageToXmlElementSoundSensor)
   //convert message to xml element and save
   TiXmlDocument doc;
   XmlFileWriter::messageToXmlElement<>(msg, &doc);
-  doc.SaveFile(utils_file_.c_str());
-  std::string element = readFile(utils_file_);
+  initTempFile(".xml"); 
+  doc.SaveFile(temp_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected element
-  init("/test/files/elements/SoundSensor_element_exp.xml");
+  init("SoundSensor_element_exp.xml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(element.c_str(), expected_element.c_str());
 }
 
 TEST_F(XmlFileWriterTest, messageToXmlElementKinematic)
 { 
-  init("/test/files/elements/element.xml");
-
   //create message
   stdr_msgs::KinematicMsg  msg;
   std::string values[] = {"5", "2", "5","3","5", "2", "5","3","5", "2", "5","3","8"};
@@ -572,19 +570,18 @@ TEST_F(XmlFileWriterTest, messageToXmlElementKinematic)
   //convert message to xml element and save
   TiXmlDocument doc;
   XmlFileWriter::messageToXmlElement<>(msg, &doc);
-  doc.SaveFile(utils_file_.c_str());
-  std::string element = readFile(utils_file_);
+  initTempFile(".xml"); 
+  doc.SaveFile(temp_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected element
-  init("/test/files/elements/Kinematic_element_exp.xml");
+  init("Kinematic_element_exp.xml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(element.c_str(), expected_element.c_str());
 }
 
 TEST_F(XmlFileWriterTest, messageToXmlElementRobot)
 { 
-  init("/test/files/elements/element.xml");
-
   //create message
   stdr_msgs::RobotMsg  msg;
   sub_elements els;
@@ -658,30 +655,30 @@ TEST_F(XmlFileWriterTest, messageToXmlElementRobot)
   //convert message to xml element and save
   TiXmlDocument doc;
   XmlFileWriter::messageToXmlElement<>(msg, &doc);
-  doc.SaveFile(utils_file_.c_str());
-  std::string element = readFile(utils_file_.c_str());
+  initTempFile(".xml"); 
+  doc.SaveFile(temp_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected element
-  init("/test/files/elements/Robot_element_exp.xml");
+  init("Robot_element_exp.xml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(element.c_str(), expected_element.c_str());
 }
 
 TEST_F(XmlFileWriterTest, messageToFileNoise)
 {
-  init("/test/files/elements/element.xml");
-
   //create message
   stdr_msgs::Noise msg;
-  std::string values[] = {"1", "2", "0.2"};
+  std::string values[] = {"1", "5", "0"};
   sub_elements els;
   els.values=values;
   createMessage(&msg, els);
 
   //convert message to xml element and save
-  XmlFileWriter::messageToFile<>(msg, utils_file_);
-  std::string element = readFile(utils_file_);
-  init("/test/files/elements/Noise_element_exp.xml");
+  initTempFile(".xml"); 
+  XmlFileWriter::messageToFile<>(msg, std::string(temp_file_));
+  std::string element = readFile(std::string(temp_file_));
+  init("Noise_element_exp.xml");
 
   //read expected element
   std::string expected_element = readFile(utils_file_);

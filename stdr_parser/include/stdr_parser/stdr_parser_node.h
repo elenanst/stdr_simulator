@@ -102,7 +102,7 @@ namespace stdr_parser
       @param indent [std::string] The indentation for the specific node
       @return void
       **/
-      std::string printParsedFile(std::string indent, std::ostringstream& output_stream_);
+      void getTreeStructure(std::string indent, std::ostringstream& output_stream_);
  
  private:
       friend class ParserNodeTest;

@@ -41,14 +41,14 @@ namespace stdr_parser
   {
     private:
 
-      //static Specs specs_struct;
-      static Specs specs_struct;
+      //static Specs specs_;
+      static Specs specs_;
       /**
       @brief Low-level recursive function for parsing the xml specifications file
       @param node [TiXmlNode*] The xml node to start from
       @return void
       **/
-      std::map<std::string,ElSpecs> parseSpecifications(TiXmlNode* node);
+      static std::map<std::string,ElSpecs> parseSpecifications(TiXmlNode* node);
       
       /**
       @brief Performs a allowed - validity check on the xml tree
@@ -56,7 +56,7 @@ namespace stdr_parser
       @param n [Node*] The stdr xml tree node to begin
       @return void
       **/
-      void validityAllowedCheck(std::string file_name, Node* n);
+      static void validityAllowedCheck(std::string file_name, Node* n);
       
       /**
       @brief Performs a required - validity check on the xml tree
@@ -64,7 +64,7 @@ namespace stdr_parser
       @param n [Node*] The stdr xml tree node to begin
       @return void
       **/
-      void validityRequiredCheck(std::string file_name, Node* n);
+      static void validityRequiredCheck(std::string file_name, Node* n);
       
       /**
       @brief Default constructor
@@ -81,28 +81,28 @@ namespace stdr_parser
       @param n [Node*] The stdr xml tree node to begin
       @return void
       **/
-      void validate(std::string file_name, Node* n);
+      static void validate(std::string file_name, Node* n);
       
       /**
       @brief Parses the mergable specifications file
       @param file [std::string] The filename that contains the mergable specifications, including its path
       @return std::set<std::string> The non mergable tags
       **/
-      std::set<std::string> parseMergableSpecifications(std::string file);
+      static std::set<std::string> parseMergableSpecifications(std::string file);
 
       /**
       @brief Returns the non mergable tags
       @param void
       @return std::set<std::string> The non mergable tags
       **/
-      std::set<std::string> getNonMergableTags(void);
+      static std::set<std::string> getNonMergableTags(void);
 
       /**
       @brief Returns the specifications for a specific tag
       @param tag [std::string] The tag 
       @return ElSpecs The structure that defines the required tags, allowed tags and default_value for the input tag
       **/
-      ElSpecs getSpecs(std::string tag);
+      static ElSpecs getSpecs(std::string tag);
 
       /**
       @brief Clears the static structure Specs

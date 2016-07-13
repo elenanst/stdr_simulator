@@ -25,7 +25,7 @@ namespace stdr_parser
 {
 
 
-  Specs Validator::specs_struct;
+  Specs Validator::specs_;
 
   /**
   @brief Default constructor
@@ -52,7 +52,7 @@ namespace stdr_parser
       return;
     }
     std::string tag = n->tag;
-    if(specs_struct.specs.find(tag) == specs_struct.specs.end() &&
+    if(specs_.specs.find(tag) == specs_.specs.end() &&
       tag != "STDR_Parser_Root_Node")
     {
       
@@ -68,8 +68,8 @@ namespace stdr_parser
       std::string child_value = n->elements[i]->value;
       if(tag != "STDR_Parser_Root_Node" && child_value == "")
       {
-        if(specs_struct.specs[tag].allowed.find(child_tag) == 
-          specs_struct.specs[tag].allowed.end())
+        if(specs_.specs[tag].allowed.find(child_tag) == 
+          specs_.specs[tag].allowed.end())
         {
           int decreaser = (extractFilename(n->elements[i]->file_origin) == 
           extractFilename(file_name) ? 1 : 0);
@@ -125,7 +125,7 @@ namespace stdr_parser
     }
     std::string tag = n->tag;
     
-    if(specs_struct.specs.find(tag) == specs_struct.specs.end() &&
+    if(specs_.specs.find(tag) == specs_.specs.end() &&
       tag != "STDR_Parser_Root_Node")
     {
       std::string error = 
@@ -134,8 +134,8 @@ namespace stdr_parser
         std::string("\nTrail: ");
       throw ParserException(error);
     }
-    for(std::set<std::string>::iterator it = specs_struct.specs[tag].required.begin() 
-      ; it != specs_struct.specs[tag].required.end() ; it++)
+    for(std::set<std::string>::iterator it = specs_.specs[tag].required.begin() 
+      ; it != specs_.specs[tag].required.end() ; it++)
     {
       std::vector<int> num = n->getTag(*it);
       if(num.size() == 0)
@@ -192,10 +192,10 @@ namespace stdr_parser
         std::string("\nError was \n\t") + std::string(doc.ErrorDesc());
       throw ParserException(error);
     }
-    specs_struct.non_mergable_tags = explodeString(
+    specs_.non_mergable_tags = explodeString(
       doc.FirstChild()->FirstChild()->Value(), ',');
    
-    return specs_struct.non_mergable_tags;
+    return specs_.non_mergable_tags;
   }
 
   /**
@@ -223,9 +223,9 @@ namespace stdr_parser
         else if(node_text!="allowed" && node_text!="required" 
           && node_text!="default")
         { //!< Base specifications tag
-          if(specs_struct.specs.find(node_text) == specs_struct.specs.end())
+          if(specs_.specs.find(node_text) == specs_.specs.end())
           { //!< New base specifications tag
-            specs_struct.specs.insert(std::pair<std::string,ElSpecs>(
+            specs_.specs.insert(std::pair<std::string,ElSpecs>(
               node_text,ElSpecs()));
           }
           else
@@ -248,15 +248,15 @@ namespace stdr_parser
         std::string base_type(node->Parent()->Value());
         if(base_type == "allowed")
         {
-          specs_struct.specs[base_tag].allowed = explodeString(node_text,',');
+          specs_.specs[base_tag].allowed = explodeString(node_text,',');
         }
         else if(base_type == "required")
         {
-          specs_struct.specs[base_tag].required = explodeString(node_text,',');
+          specs_.specs[base_tag].required = explodeString(node_text,',');
         }
         else if(base_type == "default")
         {
-          specs_struct.specs[base_tag].default_value = node_text;
+          specs_.specs[base_tag].default_value = node_text;
         }
         else
         {
@@ -284,7 +284,7 @@ namespace stdr_parser
         throw ex;
       }
     }
-  return specs_struct.specs;
+  return specs_.specs;
   }
   
   /**
@@ -335,25 +335,25 @@ namespace stdr_parser
 
   std::set<std::string> Validator::getNonMergableTags(void)
   {
-    return specs_struct.non_mergable_tags;
+    return specs_.non_mergable_tags;
   }
 
   ElSpecs Validator::getSpecs(std::string tag)
   {
-    return specs_struct.specs[tag];    
+    return specs_.specs[tag];    
   }
 
   Specs Validator::clearSpecs(void)
   {
-    if(!specs_struct.specs.empty()) 
+    if(!specs_.specs.empty()) 
     {
-      specs_struct.specs.clear();
+      specs_.specs.clear();
     }
-    if(!specs_struct.non_mergable_tags.empty())
+    if(!specs_.non_mergable_tags.empty())
     {
-      specs_struct.non_mergable_tags.clear();
+      specs_.non_mergable_tags.clear();
     }
-    return specs_struct;
+    return specs_;
   }
 
   

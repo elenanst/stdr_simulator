@@ -51,8 +51,16 @@ class ParserTest : public XmlFileWriterTest
   void init(const std::string& filename)
   {
     utils_file_ = ros::package::getPath("stdr_parser") +
+                  + "/test/files/Parser/" +
                     filename;
     root_node_ = new Node(); 
+  }
+
+  void initTempFile(const std::string& type)
+  {
+   std::string filename = "/tmp/tmpfileXXXXXX" + type;
+   temp_file_ = strdup(filename.c_str());
+   mkstemp(temp_file_);
   }
   
   //read file into string
@@ -61,7 +69,8 @@ class ParserTest : public XmlFileWriterTest
     std::ostringstream output_stream;
     std::ifstream inFile (file.c_str());
     std::string line;
-    while( getline(inFile, line) ) {
+    while( getline(inFile, line) ) 
+    {
         output_stream << line << std::endl;
     } 
     std::string content = output_stream.str().substr(0, output_stream.str().size()-1);
@@ -97,13 +106,14 @@ class ParserTest : public XmlFileWriterTest
   Node* root_node_;
   std::string utils_file_;
   Validator validator_;
+  char* temp_file_;
   
 };
 
 
 TEST_F(ParserTest, parseNoThrowXml)
 {
-  init(std::string("/test/files/test_robot_1.xml"));
+  init(std::string("test_robot_1.xml"));
   // parse the test file
   EXPECT_NO_THROW(parse(utils_file_));
 
@@ -111,7 +121,7 @@ TEST_F(ParserTest, parseNoThrowXml)
 
 TEST_F(ParserTest, parseNoThrowYaml)
 {
-  init(std::string("/test/files/khepera3.yaml"));
+  init(std::string("khepera3.yaml"));
   // parse the test file
   EXPECT_NO_THROW(parse(utils_file_));
 
@@ -119,19 +129,20 @@ TEST_F(ParserTest, parseNoThrowYaml)
 
 TEST_F(ParserTest, saveMessageXml)
 {
- init("/test/files/elements/element.xml");
 
+  
   //create message
   stdr_msgs::Noise msg;
-  std::string values[] = {"1", "2", "0.2"};
+  std::string values[] = {"1", "2", "5"};
   sub_elements els;
   els.values=values;
   createMessage(&msg, els);
 
   //save xml message 
-  Parser::saveMessage(msg, utils_file_);
-  std::string element = readFile(utils_file_);
-  init("/test/files/elements/Noise_element_exp.xml");
+  initTempFile(".xml"); 
+  Parser::saveMessage(msg, std::string(temp_file_));
+  std::string element = readFile(std::string(temp_file_));
+  init("Noise.xml");
 
   //read expected element
   std::string expected_element = readFile(utils_file_);
@@ -141,8 +152,7 @@ TEST_F(ParserTest, saveMessageXml)
 
 TEST_F(ParserTest, saveMessageYaml)
 {
-init("/test/files/elements/element.yaml");
-
+  
   //create message
   stdr_msgs::Noise msg;
   std::string values[] = {"1", "2", "0.2"};
@@ -151,9 +161,10 @@ init("/test/files/elements/element.yaml");
   createMessage(&msg, els);
 
   //save xml message 
-  Parser::saveMessage(msg, utils_file_);
-  std::string element = readFile(utils_file_);
-  init("/test/files/elements/Noise_element_exp.yaml");
+  initTempFile(".yaml"); 
+  Parser::saveMessage(msg, temp_file_);
+  std::string element = readFile(temp_file_);
+  init("Noise.yaml");
 
   //read expected element
   std::string expected_element = readFile(utils_file_);
@@ -163,7 +174,7 @@ init("/test/files/elements/element.yaml");
 
 TEST_F(ParserTest, eliminateFilenamesNoThrow)
 {
-  init(std::string("/test/files/test_robot_1.xml"));
+  init(std::string("test_robot_1.xml"));
   //parse the test file to root node
   XmlParser::parse(utils_file_,root_node_);
 
@@ -173,7 +184,7 @@ TEST_F(ParserTest, eliminateFilenamesNoThrow)
 
 TEST_F(ParserTest, eliminateFilenames)
 {
-  init(std::string("/test/files/test_robot_1.xml"));
+  init(std::string("test_robot_1.xml"));
 
   //parse the test file to root node
   XmlParser::parse(utils_file_,root_node_);
@@ -182,17 +193,17 @@ TEST_F(ParserTest, eliminateFilenames)
   while(!eliminateFilenames(root_node_));
   std::string indent = "";
   std::ostringstream output_stream;
-  std::string tree = root_node_->printParsedFile(indent, output_stream);
-
+  root_node_->getTreeStructure(indent, output_stream);
+  std::string tree = output_stream.str();
   //read expected element
-  init("/test/files/Robot_eliminated_filenames.txt");
+  init("Robot_eliminated_filenames.txt");
   std::string expected_tree = readFile(utils_file_);
   EXPECT_STREQ(expected_tree.c_str(), tree.c_str());
 }
 
 TEST_F(ParserTest, mergeNodesNoThrow)
 {
-  init(std::string("/test/files/test_robot_1.xml"));
+  init(std::string("test_robot_1.xml"));
 
   //parse the test file to root node
   XmlParser::parse(utils_file_,root_node_);
@@ -203,10 +214,10 @@ TEST_F(ParserTest, mergeNodesNoThrow)
 
 TEST_F(ParserTest, mergeNodesRobot)
 {
-  init(std::string("/test/files/stdr_multiple_allowed.xml"));
+  init(std::string("stdr_multiple_allowed.xml"));
   validator_.parseMergableSpecifications(utils_file_);
 
-  init(std::string("/test/files/Robot_merge_nodes.xml"));
+  init(std::string("Robot_merge_nodes.xml"));
   
   //parse the test file to root node
   XmlParser::parse(utils_file_,root_node_);
@@ -215,10 +226,10 @@ TEST_F(ParserTest, mergeNodesRobot)
   while(!mergeNodes(root_node_));
   std::string indent = "";
   std::ostringstream output_stream;
-  std::string tree = root_node_->printParsedFile(indent, output_stream);
-
+  root_node_->getTreeStructure(indent, output_stream);
+  std::string tree = output_stream.str();
   //read expected element
-  init("/test/files/Robot_merged_nodes.txt");
+  init("Robot_merged_nodes.txt");
   std::string expected_tree = readFile(utils_file_);
   EXPECT_STREQ(expected_tree.c_str(), tree.c_str());
 }
@@ -226,7 +237,7 @@ TEST_F(ParserTest, mergeNodesRobot)
 
 TEST_F(ParserTest, mergeNodesValuesNoThrow)
 {
-  init(std::string("/test/files/test_robot_1.xml"));
+  init(std::string("test_robot_1.xml"));
   
   //parse the test file to root node
   XmlParser::parse(utils_file_,root_node_);
@@ -238,10 +249,10 @@ TEST_F(ParserTest, mergeNodesValuesNoThrow)
 
 TEST_F(ParserTest, mergeNodesValuesRobot)
 {
-  init(std::string("/test/files/stdr_multiple_allowed.xml"));
+  init(std::string("stdr_multiple_allowed.xml"));
   validator_.parseMergableSpecifications(utils_file_);
 
-  init(std::string("/test/files/Robot_merge_nodesvalues.xml"));
+  init(std::string("Robot_merge_nodesvalues.xml"));
   
   //parse the test file to root node
   XmlParser::parse(utils_file_,root_node_);
@@ -250,10 +261,11 @@ TEST_F(ParserTest, mergeNodesValuesRobot)
   mergeNodesValues(root_node_);
   std::string indent = "";
   std::ostringstream output_stream;
-  std::string tree = root_node_->printParsedFile(indent, output_stream);
+  root_node_->getTreeStructure(indent, output_stream);
+  std::string tree = output_stream.str();
 
   //read expected element
-  init("/test/files/Robot_merged_nodesvalues.txt");
+  init("Robot_merged_nodesvalues.txt");
   std::string expected_tree = readFile(utils_file_);
   EXPECT_STREQ(expected_tree.c_str(), tree.c_str());
 }
@@ -261,7 +273,7 @@ TEST_F(ParserTest, mergeNodesValuesRobot)
 
 TEST_F(ParserTest, createMessageNoThrow)
 {
-  init(std::string("/test/files/test_robot_1.xml"));
+  init(std::string("test_robot_1.xml"));
   stdr_msgs::RobotMsg msg;
 
   //create a mesage from file
@@ -270,20 +282,21 @@ TEST_F(ParserTest, createMessageNoThrow)
 
 TEST_F(ParserTest, createMessageRobot)
 {
-  init(std::string("/test/files/test_robot_1.xml"));
+  init(std::string("test_robot_1.xml"));
   
   //create a mesage from file
   stdr_msgs::RobotMsg msg = Parser::createMessage<stdr_msgs::RobotMsg>(utils_file_);
   
 
   //get expected message
-  init(std::string("/test/files/test_robot_1_exp.xml"));
+  init(std::string("test_robot_1_exp.xml"));
   std::string expected_element = readFile(utils_file_);
 
+
+  initTempFile(".xml"); 
   //write message to file and read into string
-  init(std::string("/test/files/test_robot_1_temp.xml"));
-  XmlFileWriter::messageToFile<>(msg, utils_file_);
-  std::string element = readFile(utils_file_);
+  XmlFileWriter::messageToFile<>(msg, temp_file_);
+  std::string element = readFile(temp_file_);
 
   //compare output with expected string
   EXPECT_STREQ(expected_element.c_str(), element.c_str());

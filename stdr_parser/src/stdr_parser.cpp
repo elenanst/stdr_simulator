@@ -26,7 +26,6 @@ namespace stdr_parser
   
   //!< Static initializations
   Node* Parser::base_node_ = new Node();
-  Validator Parser::validator_;
   
   /**
   @brief Default constructor
@@ -59,29 +58,33 @@ namespace stdr_parser
         YamlParser::parse(file_name,base_node_);
       }
       else
+      {
+        std::string error = 
+        std::string("Unsupported type: supported types are xml and yaml");
       
-{ROS_INFO("0");}
+        delete base_node_;
+      
+        throw ParserException(error);
+      }
+
       std::string base_path_ = ros::package::getPath("stdr_resources");
       std::string path_with_file_ = base_path_ +  std::string("/resources/specifications/stdr_multiple_allowed.xml");
-      validator_.parseMergableSpecifications(path_with_file_);
-      
+      Validator::parseMergableSpecifications(path_with_file_);
       while(!eliminateFilenames(base_node_));
       while(!mergeNodes(base_node_));
       mergeNodesValues(base_node_);
       
-      validator_.validate(file_name, base_node_);
-      
+      Validator::validate(file_name, base_node_);
       //!< Uncomment to see the internal tree structure
       //~ base_node_->printParsedXml(base_node_,"");
     }
     catch(ParserException ex)
     {
-ROS_INFO("1");
       throw ex;
     }
     catch(YAML::ParserException& e)
     {
-ROS_INFO("6");
+
       std::string error = 
         std::string("Failed to load file '") + 
         file_name + std::string("'") +
@@ -215,7 +218,7 @@ ROS_INFO("2");
         continue;
       }
       std::string tag = n->elements[i]->tag;
-      std::set<std::string> container = validator_.getNonMergableTags(); 
+      std::set<std::string> container = Validator::getNonMergableTags(); 
      if(container.find(tag) == container.end())
      {
         std::vector<int> num = n->getTag(tag);

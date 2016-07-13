@@ -93,7 +93,7 @@ namespace stdr_parser
   @param indent [std::string] The indentation for the specific node
   @return void
   **/
-  std::string Node::printParsedFile(std::string indent, std::ostringstream& output_stream_)
+  void Node::getTreeStructure(std::string indent, std::ostringstream& output_stream_)
   { 
    
     
@@ -132,10 +132,9 @@ namespace stdr_parser
     
     for(unsigned int i = 0 ; i < elements.size() ; i++)
     {
-      elements[i]->printParsedFile(indent+std::string("| "), output_stream_);
+      elements[i]->getTreeStructure(indent+std::string("| "), output_stream_);
     }
     
-    return output_stream_.str();
   }
   
   /**

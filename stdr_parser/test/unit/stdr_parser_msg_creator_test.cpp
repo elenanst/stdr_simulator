@@ -45,16 +45,23 @@ class MsgCreatorTest : public ::testing::Test
   virtual void TearDown()
   {
     delete root_node_;
-    remove(utils_file_.c_str());
   }
 
   //initialize members
   void init(const std::string& filename)
   {
     utils_file_ = ros::package::getPath("stdr_parser") +
-                    filename;
+                    "/test/files/MsgCreator/" +
+                      filename;
     root_node_ = new Node(); 
     id_ = 0;
+  }
+
+  void initTempFile(const std::string& type)
+  {
+   std::string filename = "/tmp/tmpfileXXXXXX" + type;
+   temp_file_ = strdup(filename.c_str());
+   mkstemp(temp_file_);
   }
  
   //read file into string
@@ -71,13 +78,14 @@ class MsgCreatorTest : public ::testing::Test
   std::string utils_file_;
   Node* root_node_;
   unsigned int id_;
+  char* temp_file_;
   
 };
 
 
 TEST_F(MsgCreatorTest, createMessageNoise)
 {
-  init(std::string("/test/files/elements/Noise.xml"));
+  init(std::string("Noise.xml"));
   std::string expected_element = readFile(utils_file_);
 
   //read xml file into Node
@@ -86,17 +94,9 @@ TEST_F(MsgCreatorTest, createMessageNoise)
   //create message from Node
   stdr_msgs::Noise msg = MessageCreator::createMessage<stdr_msgs::Noise>(root_node_, id_);
 
-/*uint32_t serial_size = ros::serialization::serializationLength(msg);
-boost::array<char,1024> buffer;//(new char[serial_size]);
-
-ros::serialization::OStream stream(buffer.get(), serial_size);
-ros::serialization::serialize(stream, msg);
-std::string element;
-std::copy(buffer.begin(), buffer.begin()+serial_size, std::back_inserter(element));
-*/
   //write message to file and read into string
-  init(std::string("/test/files/elements/Noise_temp.xml"));
-  XmlFileWriter::messageToFile<>(msg, utils_file_);
+  initTempFile(".xml");
+  XmlFileWriter::messageToFile<>(msg, temp_file_);
   std::string element = readFile(utils_file_);
 
   //compare output with expected string
@@ -105,7 +105,7 @@ std::copy(buffer.begin(), buffer.begin()+serial_size, std::back_inserter(element
 
 TEST_F(MsgCreatorTest, createMessageFootprint)
 {
-  init(std::string("/test/files/elements/Footprint.xml"));
+  init(std::string("Footprint.xml"));
   std::string expected_element = readFile(utils_file_);
 
   //read xml file into Node
@@ -115,8 +115,8 @@ TEST_F(MsgCreatorTest, createMessageFootprint)
   stdr_msgs::FootprintMsg msg = MessageCreator::createMessage<stdr_msgs::FootprintMsg>(root_node_, id_);
 
   //write message to file and read into string
-  init(std::string("/test/files/elements/Footprint_temp.xml"));
-  XmlFileWriter::messageToFile<>(msg, utils_file_);
+  initTempFile(".xml");
+  XmlFileWriter::messageToFile<>(msg, temp_file_);
   std::string element = readFile(utils_file_);
 
   //compare output with expected string
@@ -125,7 +125,7 @@ TEST_F(MsgCreatorTest, createMessageFootprint)
 
 TEST_F(MsgCreatorTest, createMessageLaserSensor)
 {
-  init(std::string("/test/files/elements/LaserSensor.xml"));
+  init(std::string("LaserSensor.xml"));
   std::string expected_element = readFile(utils_file_);
 
   //read xml file into Node
@@ -135,8 +135,8 @@ TEST_F(MsgCreatorTest, createMessageLaserSensor)
   stdr_msgs::LaserSensorMsg msg = MessageCreator::createMessage<stdr_msgs::LaserSensorMsg>(root_node_, id_);
 
   //write message to file and read into string
-  init(std::string("/test/files/elements/LaserSensor_temp.xml"));
-  XmlFileWriter::messageToFile<>(msg, utils_file_);
+  initTempFile(".xml");
+  XmlFileWriter::messageToFile<>(msg, temp_file_);
   std::string element = readFile(utils_file_);
   
   //compare output with expected string
@@ -145,7 +145,7 @@ TEST_F(MsgCreatorTest, createMessageLaserSensor)
 
 TEST_F(MsgCreatorTest, createMessageSonarSensor)
 {
-  init(std::string("/test/files/elements/SonarSensor.xml"));
+  init(std::string("SonarSensor.xml"));
   std::string expected_element = readFile(utils_file_);
 
   //read xml file into Node
@@ -155,8 +155,8 @@ TEST_F(MsgCreatorTest, createMessageSonarSensor)
   stdr_msgs::SonarSensorMsg msg = MessageCreator::createMessage<stdr_msgs::SonarSensorMsg>(root_node_, id_);
 
   //write message to file and read into string
-  init(std::string("/test/files/elements/SonarSensor_temp.xml"));
-  XmlFileWriter::messageToFile<>(msg, utils_file_);
+  initTempFile(".xml");
+  XmlFileWriter::messageToFile<>(msg, temp_file_);
   std::string element = readFile(utils_file_);
 
   //compare output with expected string
@@ -166,7 +166,7 @@ TEST_F(MsgCreatorTest, createMessageSonarSensor)
 
 TEST_F(MsgCreatorTest, createMessageRfidSensor)
 {
-  init(std::string("/test/files/elements/RfidSensor.xml"));
+  init(std::string("RfidSensor.xml"));
   std::string expected_element = readFile(utils_file_);
  
   //read xml file into Node
@@ -176,8 +176,8 @@ TEST_F(MsgCreatorTest, createMessageRfidSensor)
   stdr_msgs::RfidSensorMsg msg = MessageCreator::createMessage<stdr_msgs::RfidSensorMsg>(root_node_, id_);
 
   //write message to file and read into string
-  init(std::string("/test/files/elements/RfidSensor_temp.xml"));
-  XmlFileWriter::messageToFile<>(msg, utils_file_);
+  initTempFile(".xml");
+  XmlFileWriter::messageToFile<>(msg, temp_file_);
   std::string element = readFile(utils_file_);
   
   //compare output with expected string
@@ -186,7 +186,7 @@ TEST_F(MsgCreatorTest, createMessageRfidSensor)
 
 TEST_F(MsgCreatorTest, createMessageCO2Sensor)
 {
-  init(std::string("/test/files/elements/CO2Sensor.xml"));
+  init(std::string("CO2Sensor.xml"));
   std::string expected_element = readFile(utils_file_);
 
   //read xml file into Node
@@ -196,8 +196,8 @@ TEST_F(MsgCreatorTest, createMessageCO2Sensor)
   stdr_msgs::CO2SensorMsg msg = MessageCreator::createMessage<stdr_msgs::CO2SensorMsg>(root_node_, id_);
 
   //write message to file and read into string
-  init(std::string("/test/files/elements/CO2Sensor_temp.xml"));
-  XmlFileWriter::messageToFile<>(msg, utils_file_);
+  initTempFile(".xml");
+  XmlFileWriter::messageToFile<>(msg, temp_file_);
   std::string element = readFile(utils_file_);
 
   //compare output with expected string
@@ -206,7 +206,7 @@ TEST_F(MsgCreatorTest, createMessageCO2Sensor)
 
 TEST_F(MsgCreatorTest, createMessageThermalSensor)
 {
-  init(std::string("/test/files/elements/ThermalSensor.xml"));
+  init(std::string("ThermalSensor.xml"));
   std::string expected_element = readFile(utils_file_);
 
   //read xml file into Node
@@ -216,8 +216,8 @@ TEST_F(MsgCreatorTest, createMessageThermalSensor)
   stdr_msgs::ThermalSensorMsg msg = MessageCreator::createMessage<stdr_msgs::ThermalSensorMsg>(root_node_, id_);
 
   //write message to file and read into string
-  init(std::string("/test/files/elements/ThermalSensor_temp.xml"));
-  XmlFileWriter::messageToFile<>(msg, utils_file_);
+  initTempFile(".xml");
+  XmlFileWriter::messageToFile<>(msg, temp_file_);
   std::string element = readFile(utils_file_);
 
   //compare output with expected string
@@ -226,7 +226,7 @@ TEST_F(MsgCreatorTest, createMessageThermalSensor)
 
 TEST_F(MsgCreatorTest, createMessageSoundSensor)
 {
-  init(std::string("/test/files/elements/SoundSensor.xml"));
+  init(std::string("SoundSensor.xml"));
   std::string expected_element = readFile(utils_file_);
 
   //read xml file into Node
@@ -236,8 +236,8 @@ TEST_F(MsgCreatorTest, createMessageSoundSensor)
   stdr_msgs::SoundSensorMsg msg = MessageCreator::createMessage<stdr_msgs::SoundSensorMsg>(root_node_, id_);
 
   //write message to file and read into string
-  init(std::string("/test/files/elements/SoundSensor_temp.xml"));
-  XmlFileWriter::messageToFile<>(msg, utils_file_);
+  initTempFile(".xml");
+  XmlFileWriter::messageToFile<>(msg, temp_file_);
   std::string element = readFile(utils_file_);
 
   //compare output with expected string
@@ -246,7 +246,7 @@ TEST_F(MsgCreatorTest, createMessageSoundSensor)
 
 TEST_F(MsgCreatorTest, createMessageKinematic)
 {
-  init(std::string("/test/files/elements/Kinematic.xml"));
+  init(std::string("Kinematic.xml"));
   std::string expected_element = readFile(utils_file_);
 
   //read xml file into Node
@@ -256,8 +256,8 @@ TEST_F(MsgCreatorTest, createMessageKinematic)
   stdr_msgs::KinematicMsg msg = MessageCreator::createMessage<stdr_msgs::KinematicMsg>(root_node_, id_);
 
   //write message to file and read into string
-  init(std::string("/test/files/elements/Kinematic_temp.xml"));
-  XmlFileWriter::messageToFile<>(msg, utils_file_);
+  initTempFile(".xml");
+  XmlFileWriter::messageToFile<>(msg, temp_file_);
   std::string element = readFile(utils_file_);
 
   //compare output with expected string
@@ -266,7 +266,7 @@ TEST_F(MsgCreatorTest, createMessageKinematic)
 
 TEST_F(MsgCreatorTest, createMessageRobot)
 {
-  init(std::string("/test/files/elements/Robot.xml"));
+  init(std::string("Robot.xml"));
   std::string expected_element = readFile(utils_file_);
 
   //read xml file into Node
@@ -276,8 +276,8 @@ TEST_F(MsgCreatorTest, createMessageRobot)
   stdr_msgs::RobotMsg msg = MessageCreator::createMessage<stdr_msgs::RobotMsg>(root_node_, id_);
 
   //write message to file and read into string
-  init(std::string("/test/files/elements/Robot_temp.xml"));
-  XmlFileWriter::messageToFile<>(msg, utils_file_);
+  initTempFile(".xml");
+  XmlFileWriter::messageToFile<>(msg, temp_file_);
   std::string element = readFile(utils_file_);
   
   //compare output with expected string
@@ -287,7 +287,7 @@ TEST_F(MsgCreatorTest, createMessageRobot)
  
 TEST_F(MsgCreatorTest, createMessagePose2D)
 {
-  init(std::string("/test/files/elements/Pose2D.xml"));
+  init(std::string("Pose2D.xml"));
   std::string expected_element = readFile(utils_file_);
 
   //read xml file into Node
@@ -300,8 +300,8 @@ TEST_F(MsgCreatorTest, createMessagePose2D)
   geometry_msgs::Pose2D msg = MessageCreator::createMessage<geometry_msgs::Pose2D>(root_node_->elements[indexes[0]], id_);
 
   //write message to file and read into string
-  init(std::string("/test/files/elements/Pose2D_temp.xml"));
-  XmlFileWriter::messageToFile<>(msg, utils_file_);
+  initTempFile(".xml");
+  XmlFileWriter::messageToFile<>(msg, temp_file_);
   std::string element = readFile(utils_file_);
 
   //compare output with expected string
@@ -311,7 +311,7 @@ TEST_F(MsgCreatorTest, createMessagePose2D)
 
 TEST_F(MsgCreatorTest, createMessagePoint)
 {
-  init(std::string("/test/files/elements/Point.xml"));
+  init(std::string("Point.xml"));
   std::string expected_element = readFile(utils_file_);
 
   //read xml file into Node
@@ -325,8 +325,8 @@ TEST_F(MsgCreatorTest, createMessagePoint)
 
 
   //write message to file and read into string
-  init(std::string("/test/files/elements/Point_temp.xml"));
-  XmlFileWriter::messageToFile<>(msg, utils_file_);
+  initTempFile(".xml");
+  XmlFileWriter::messageToFile<>(msg, temp_file_);
   std::string element = readFile(utils_file_);
   
   //compare output with expected string

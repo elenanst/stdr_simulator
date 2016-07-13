@@ -54,11 +54,35 @@ class YamlParserTest : public ::testing::Test
   void init(const std::string& filename)
   {
     robot_file_ = ros::package::getPath("stdr_parser") +
+                  "/test/files/YamlParser/" +
                     filename;
 
     root_node_ = new Node();  //auta na pane sto setup?
     root_node_->tag = "STDR_Parser_Root_Node";
   }
+ 
+  void initNode(void)
+  {
+    expected_node_ = new Node();
+    Node* tag1 = new Node();
+    tag1->tag = "noise";
+    expected_node_->elements.push_back(tag1);
+    Node* tag2 = new Node();
+    tag2->tag = "noise_specifications";
+    tag1->elements.push_back(tag2);
+    Node* tag3 = new Node();
+    tag3->tag = "noise_mean";
+    tag2->elements.push_back(tag3);
+    Node* tag4 = new Node();
+    tag4->tag = "noise_std";
+    tag2->elements.push_back(tag4);
+    Node* value1 = new Node();
+    value1->value = "2";
+    tag3->elements.push_back(value1);
+    Node* value2 = new Node();
+    value2->value = "0";
+    tag4->elements.push_back(value2);
+   }
 
   std::string readFile(const std::string& filename)
   {
@@ -77,18 +101,82 @@ class YamlParserTest : public ::testing::Test
   {
     YamlParser::parseLow(node, n);
   }
+
+  bool compareNodes(Node* expected, Node* node, bool* result)
+  {
+    std::vector<Node*> elements = node->elements;
+    std::vector<Node*> elements_exp = expected->elements;
+    std::vector<std::string> expected_tags;
+    std::vector<std::string> expected_values;
+    for(int i = 0; i < elements_exp.size(); i++)
+    {
+      if(elements_exp.at(i)->tag != "")
+      {
+        expected_tags.push_back(elements_exp.at(i)->tag);
+      }
+    }
+    for(int i = 0; i < elements_exp.size(); i++)
+    {
+       if(elements_exp.at(i)->value != "")
+       {
+          expected_values.push_back(elements_exp.at(i)->value);
+       }
+    }
+    int hits = 0;
+    for(int i = 0; i < elements.size(); i++)
+    {
+       int pos;
+       
+       if(elements[i]->tag != "")
+       {
+        
+         pos = find(expected_tags.begin(), expected_tags.end(), elements[i]->tag) - expected_tags.begin();
+         if(pos >= expected_tags.size())
+         {
+           *result = *result && false;
+         }
+         else
+         {
+           hits +=1;
+         }
+       }
+       else
+       {
+         pos = find(expected_values.begin(), expected_values.end(), elements[i]->value) - expected_values.begin();
+         if(pos >= expected_values.size())
+         {
+           *result = *result && false;
+         }
+         else
+         {
+           hits +=1;
+         }
+       }
+       
+       compareNodes(elements[i], elements_exp.at(pos), result);
+    }
+    if(hits == elements.size())
+    {
+      *result = *result && true;
+    }
+    else
+    {
+      *result = *result && false;
+    }
+ }
   
 
   // Variables
   Node* root_node_;
   std::string robot_file_;
   std::string dump_file_;
+  Node* expected_node_;
 
 };
 
 TEST_F(YamlParserTest, parseTestRobot1)
 {
-  init(std::string("/test/files/too_simple_robot.yaml"));
+  init(std::string("too_simple_robot.yaml"));
 
   // parse the test file
   EXPECT_NO_THROW(YamlParser::parse(robot_file_, root_node_));
@@ -99,14 +187,14 @@ TEST_F(YamlParserTest, parseTestRobot1)
 
 TEST_F(YamlParserTest, parseAlternateResourceLocation)
 {
-  init(std::string("/test/files/too_simple_robot.yaml"));
+  init(std::string("too_simple_robot.yaml"));
 
   // parse the correct test file
   EXPECT_NO_THROW(YamlParser::parse(robot_file_, root_node_));
 
 
   TearDown();
-  init(std::string("/test/files/test_robot_3.yaml"));
+  init(std::string("test_robot_3.yaml"));
 
   // parse the incorrect test file
   EXPECT_THROW(YamlParser::parse(robot_file_, root_node_), ParserException);
@@ -115,26 +203,24 @@ TEST_F(YamlParserTest, parseAlternateResourceLocation)
 //random output of this test
 TEST_F(YamlParserTest, parse)
 {
-    init(std::string("/test/files/test_robot_1.yaml"));
+    init(std::string("Noise_element_exp.yaml"));
     
     YamlParser::parse(robot_file_,root_node_);
-
-    //get string by calling printParsedFile
     std::string indent="";
     std::ostringstream output_stream;
-    std::string tree = root_node_->printParsedFile(indent, output_stream);
-
-
-    //read expected tree
-    init(std::string("/test/files/test_robot_1_tree_yaml.txt"));
-    std::string expected_tree = readFile(robot_file_);
-    EXPECT_STREQ(expected_tree.c_str(), tree.c_str());
+    root_node_->getTreeStructure(indent, output_stream);
+    std::string tree = output_stream.str();
+    initNode();
+    
+    bool result = true;
+    compareNodes(expected_node_, root_node_, &result);
+    EXPECT_TRUE(result);
 }
 
 //random output of this test
 TEST_F(YamlParserTest, parseLow)
 {
-    init(std::string("/test/files/test_robot_1.yaml"));
+    init(std::string("Noise_element_exp.yaml"));
     std::string path = robot_file_;
     std::ifstream fin(path.c_str());
     
@@ -166,12 +252,15 @@ TEST_F(YamlParserTest, parseLow)
     //get string by calling printParsedFile
     std::string indent="";
     std::ostringstream output_stream;
-    std::string tree = root_node_->printParsedFile(indent, output_stream);
+    root_node_->getTreeStructure(indent, output_stream);
+    std::string tree = output_stream.str();
 
     //read expected tree
-    init(std::string("/test/files/test_robot_1_tree_parselow_yaml.txt"));
-    std::string expected_tree = readFile(robot_file_);
-    EXPECT_STREQ(expected_tree.c_str(), tree.c_str());
+    initNode();
+    
+    bool result = true;
+    compareNodes(expected_node_, root_node_, &result);
+    EXPECT_TRUE(result);
     
 
 }

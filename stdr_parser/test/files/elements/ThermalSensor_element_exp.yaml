@@ -1,1 +1,0 @@
-thermal_sensor:  thermal_sensor_specifications:    angle_span: 5    max_range: 5    frequency: 2    frame_id: 3    pose:      x: 45      y: 52      theta: 27

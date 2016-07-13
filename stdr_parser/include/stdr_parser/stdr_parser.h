@@ -43,8 +43,6 @@ namespace stdr_parser
     private:
       
 
-      //Validator Object 
-      static Validator validator_;
 
       //!< Base node of the parsed file
       static Node* base_node_;

@@ -35,7 +35,8 @@ protected:
   void init(const std::string& filename)
   {
     utils_file_ = ros::package::getPath("stdr_parser") +
-                    filename;
+                    "/test/files/Node/" +
+                      filename;
     root_node_ = new Node();
   }
 
@@ -62,51 +63,53 @@ protected:
  
 };
 
-TEST_F(ParserNodeTest, printParsedXmlNoIndent)
+TEST_F(ParserNodeTest, getTreeStructureNoIndent)
 {
 
-  init(std::string("/test/files/elements/Noise.xml"));
-  std::ostringstream output_stream_;
+  init(std::string("Noise.xml"));
+  std::ostringstream output_stream;
   
   //parse file into node
   XmlParser::parse(utils_file_, root_node_);
   std::string indent = "" ;
 
   //get the xml content of file into string
-  std::string tree = root_node_->printParsedFile(indent, output_stream_);
+  root_node_->getTreeStructure(indent, output_stream);
+  std::string tree = output_stream.str();
  
   //get expected output 
-  init("/test/files/elements/Noise_tree.txt");
+  init("Noise_tree.txt");
   std::string expected_tree = readFile(utils_file_);
 
-  //test if printParsedFile prints as expected
+  //test if getTreeStructure prints as expected
   EXPECT_STREQ(expected_tree.c_str(), tree.c_str());
 
 }
 
-TEST_F(ParserNodeTest, printParsedXmlIndent)
+TEST_F(ParserNodeTest,getTreeStructureIndent)
 {
-  init(std::string("/test/files/elements/Noise.xml"));
-  std::ostringstream output_stream_;
+  init(std::string("Noise.xml"));
+  std::ostringstream output_stream;
   
   //parse file into node
   XmlParser::parse(utils_file_, root_node_);
   std::string indent = "&" ;
 
   //get the xml content of file into string
-  std::string tree = root_node_->printParsedFile(indent, output_stream_);
+  root_node_->getTreeStructure(indent, output_stream);
+  std::string tree = output_stream.str();
 
   //get expected output 
-  init("/test/files/elements/Noise_tree_Indent.txt");
+  init("Noise_tree_Indent.txt");
   std::string expected_tree = readFile(utils_file_);
 
-  //test if printParsedFile prints as expected
+  //test if getTreeStructure prints as expected
   EXPECT_STREQ(expected_tree.c_str(), tree.c_str());
 }
 
 TEST_F(ParserNodeTest, increasePriority)
 {
-  init(std::string("/test/files/elements/CO2Sensor.xml"));
+  init(std::string("CO2Sensor.xml"));
 
   //parse file into node
   XmlParser::parse(utils_file_, root_node_);
@@ -135,7 +138,7 @@ TEST_F(ParserNodeTest, increasePriority)
 
 TEST_F(ParserNodeTest, getTagRightTag)
 {
-  init(std::string("/test/files/elements/LaserSensor.xml"));
+  init(std::string("LaserSensor.xml"));
 
   //parse file into node
   XmlParser::parse(utils_file_, root_node_);
@@ -152,7 +155,7 @@ TEST_F(ParserNodeTest, getTagRightTag)
 
 TEST_F(ParserNodeTest, getTagMultipleOccurence)
 {
-  init(std::string("/test/files/elements/LaserSensor_multiple.xml"));
+  init(std::string("LaserSensor_multiple.xml"));
 
   //parse file into node
   XmlParser::parse(utils_file_, root_node_);
@@ -170,7 +173,7 @@ TEST_F(ParserNodeTest, getTagMultipleOccurence)
 
 TEST_F(ParserNodeTest, getTagEmpty)
 {
-  init(std::string("/test/files/elements/SonarSensor.xml"));
+  init(std::string("SonarSensor.xml"));
 
   //parse file into node
   XmlParser::parse(utils_file_, root_node_);
@@ -184,7 +187,7 @@ TEST_F(ParserNodeTest, getTagEmpty)
 
 TEST_F(ParserNodeTest, unallocateChildren)
 {
-  init(std::string("/test/files/elements/Noise.xml"));
+  init(std::string("Noise.xml"));
 
   //parse file into node
   XmlParser::parse(utils_file_, root_node_);
@@ -199,7 +202,7 @@ TEST_F(ParserNodeTest, unallocateChildren)
 //not tested properly
 TEST_F(ParserNodeTest,checkForFilenameTrue)
 {
-  init(std::string("/test/files/test_robot_1.xml"));
+  init(std::string("test_robot_1.xml"));
 
   //parse file into node
   XmlParser::parse(utils_file_, root_node_);

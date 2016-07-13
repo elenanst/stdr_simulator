@@ -24,7 +24,6 @@
 namespace stdr_parser
 {
 
-  Validator MessageCreator::validator_;
   /**
   @brief Default constructor
   @return void
@@ -60,7 +59,7 @@ namespace stdr_parser
     {
       
       msg.x = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("x").default_value.c_str());
+        Validator::getSpecs("x").default_value.c_str());
     }
     else
     {
@@ -73,7 +72,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.y = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("y").default_value.c_str());
+        Validator::getSpecs("y").default_value.c_str());
     }
     else
     {
@@ -85,7 +84,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.theta =  stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("theta").default_value.c_str());
+        Validator::getSpecs("theta").default_value.c_str());
     }
     else
     {
@@ -110,7 +109,7 @@ namespace stdr_parser
     indexes = n->getTag("x");
     if( indexes.size() == 0) {
       msg.x =  stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("x").default_value.c_str());
+        Validator::getSpecs("x").default_value.c_str());
     } else {
       msg.x =  stdr_parser::MessageCreator::stringToType<float>(
         n->elements[indexes[0]]->elements[0]->value.c_str());
@@ -119,7 +118,7 @@ namespace stdr_parser
     indexes = n->getTag("y");
     if( indexes.size() == 0) {
       msg.y =  stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("y").default_value.c_str());
+        Validator::getSpecs("y").default_value.c_str());
     } else {
       msg.y =  stdr_parser::MessageCreator::stringToType<float>(
         n->elements[indexes[0]]->elements[0]->value.c_str());
@@ -128,7 +127,7 @@ namespace stdr_parser
     indexes = n->getTag("z");
     if( indexes.size() == 0) {
       msg.z =  stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("z").default_value.c_str());
+        Validator::getSpecs("z").default_value.c_str());
     } else {
       msg.z =  stdr_parser::MessageCreator::stringToType<float>(
         n->elements[indexes[0]]->elements[0]->value.c_str());
@@ -156,7 +155,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.noiseMean =  stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("noise_mean").default_value.c_str());
+        Validator::getSpecs("noise_mean").default_value.c_str());
     }
     else
     {
@@ -168,7 +167,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.noiseStd = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("noise_std").default_value.c_str());
+        Validator::getSpecs("noise_std").default_value.c_str());
     }
     else
     {
@@ -204,7 +203,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.radius = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("radius").default_value.c_str());
+        Validator::getSpecs("radius").default_value.c_str());
     }
     else
     {
@@ -246,7 +245,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.maxAngle = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("max_angle").default_value.c_str());
+        Validator::getSpecs("max_angle").default_value.c_str());
     }
     else
     {
@@ -259,7 +258,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.minAngle = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("min_angle").default_value.c_str());
+        Validator::getSpecs("min_angle").default_value.c_str());
     }
     else
     {
@@ -272,7 +271,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.maxRange = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("max_range").default_value.c_str());
+        Validator::getSpecs("max_range").default_value.c_str());
     }
     else
     {
@@ -285,7 +284,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.minRange = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("min_range").default_value.c_str());
+        Validator::getSpecs("min_range").default_value.c_str());
     }
     else
     {
@@ -298,7 +297,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.numRays = stdr_parser::MessageCreator::stringToType<int>(
-        validator_.getSpecs("num_rays").default_value.c_str());
+        Validator::getSpecs("num_rays").default_value.c_str());
     }
     else
     {
@@ -319,7 +318,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.frequency = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("frequency").default_value.c_str());
+        Validator::getSpecs("frequency").default_value.c_str());
     }
     else
     {
@@ -348,11 +347,11 @@ namespace stdr_parser
     else
     {
     msg.pose.x =  stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("x").default_value.c_str());
+        Validator::getSpecs("x").default_value.c_str());
       msg.pose.y = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("y").default_value.c_str());
+        Validator::getSpecs("y").default_value.c_str());
       msg.pose.theta = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("theta").default_value.c_str());
+        Validator::getSpecs("theta").default_value.c_str());
     }
     return msg;
   }
@@ -378,7 +377,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.maxRange = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("max_range").default_value.c_str());
+        Validator::getSpecs("max_range").default_value.c_str());
     }
     else
     {
@@ -391,7 +390,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.minRange = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("min_range").default_value.c_str());
+        Validator::getSpecs("min_range").default_value.c_str());
     }
     else
     {
@@ -404,7 +403,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.coneAngle =  stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("cone_angle").default_value.c_str());
+        Validator::getSpecs("cone_angle").default_value.c_str());
     }
     else
     {
@@ -425,7 +424,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.frequency = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("frequency").default_value.c_str());
+        Validator::getSpecs("frequency").default_value.c_str());
     }
     else
     {
@@ -454,11 +453,11 @@ namespace stdr_parser
     else
     {
       msg.pose.x = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("x").default_value.c_str());
+        Validator::getSpecs("x").default_value.c_str());
       msg.pose.y = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("y").default_value.c_str());
+        Validator::getSpecs("y").default_value.c_str());
       msg.pose.theta = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("theta").default_value.c_str());
+        Validator::getSpecs("theta").default_value.c_str());
     }
     return msg;
   }
@@ -485,7 +484,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.angleSpan = stdr_parser::MessageCreator::stringToType<float>(
-       validator_.getSpecs("angle_span").default_value.c_str());
+       Validator::getSpecs("angle_span").default_value.c_str());
     }
     else
     {
@@ -498,7 +497,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.maxRange = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("max_range").default_value.c_str());
+        Validator::getSpecs("max_range").default_value.c_str());
     }
     else
     {
@@ -511,7 +510,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.signalCutoff = stdr_parser::MessageCreator::stringToType<float>(
-          validator_.getSpecs("signal_cutoff").default_value.c_str());
+          Validator::getSpecs("signal_cutoff").default_value.c_str());
     }
     else
     {
@@ -524,7 +523,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.frequency = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("frequency").default_value.c_str());
+        Validator::getSpecs("frequency").default_value.c_str());
     }
     else
     {
@@ -553,11 +552,11 @@ namespace stdr_parser
     else
     {
       msg.pose.x = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("x").default_value.c_str());
+        Validator::getSpecs("x").default_value.c_str());
       msg.pose.y = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("y").default_value.c_str());
+        Validator::getSpecs("y").default_value.c_str());
       msg.pose.theta = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("theta").default_value.c_str());
+        Validator::getSpecs("theta").default_value.c_str());
     }
     return msg;
   }
@@ -584,7 +583,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.maxRange = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("max_range").default_value.c_str());
+        Validator::getSpecs("max_range").default_value.c_str());
     }
     else
     {
@@ -597,7 +596,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.frequency = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("frequency").default_value.c_str());
+        Validator::getSpecs("frequency").default_value.c_str());
     }
     else
     {
@@ -626,11 +625,11 @@ namespace stdr_parser
     else
     {
       msg.pose.x = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("x").default_value.c_str());
+        Validator::getSpecs("x").default_value.c_str());
       msg.pose.y = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("y").default_value.c_str());
+        Validator::getSpecs("y").default_value.c_str());
       msg.pose.theta = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("theta").default_value.c_str());
+        Validator::getSpecs("theta").default_value.c_str());
     }
     return msg;
   }
@@ -657,7 +656,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.maxRange = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("max_range").default_value.c_str());
+        Validator::getSpecs("max_range").default_value.c_str());
     }
     else
     {
@@ -670,7 +669,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.angleSpan = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("angle_span").default_value.c_str());
+        Validator::getSpecs("angle_span").default_value.c_str());
     }
     else
     {
@@ -683,7 +682,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.frequency = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("frequency").default_value.c_str());
+        Validator::getSpecs("frequency").default_value.c_str());
     }
     else
     {
@@ -712,11 +711,11 @@ namespace stdr_parser
     else
     {
       msg.pose.x = stdr_parser::MessageCreator::stringToType<float>(
-       validator_.getSpecs("x").default_value.c_str());
+       Validator::getSpecs("x").default_value.c_str());
       msg.pose.y = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("y").default_value.c_str());
+        Validator::getSpecs("y").default_value.c_str());
       msg.pose.theta = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("theta").default_value.c_str());
+        Validator::getSpecs("theta").default_value.c_str());
     }
     return msg;
   }
@@ -743,7 +742,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.maxRange = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("max_range").default_value.c_str());
+        Validator::getSpecs("max_range").default_value.c_str());
     }
     else
     {
@@ -756,7 +755,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.angleSpan = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("angle_span").default_value.c_str());
+        Validator::getSpecs("angle_span").default_value.c_str());
     }
     else
     {
@@ -769,7 +768,7 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.frequency = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("frequency").default_value.c_str());
+        Validator::getSpecs("frequency").default_value.c_str());
     }
     else
     {
@@ -798,11 +797,11 @@ namespace stdr_parser
     else
     {
       msg.pose.x = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("x").default_value.c_str());
+        Validator::getSpecs("x").default_value.c_str());
       msg.pose.y = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("y").default_value.c_str());
+        Validator::getSpecs("y").default_value.c_str());
       msg.pose.theta = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("theta").default_value.c_str());
+        Validator::getSpecs("theta").default_value.c_str());
     }
     return msg;
   }
@@ -829,7 +828,7 @@ namespace stdr_parser
     indexes = specs->getTag("kinematic_model");
     if(indexes.size() == 0)
     {
-      msg.type = validator_.getSpecs("kinematic_model").default_value.c_str();
+      msg.type = Validator::getSpecs("kinematic_model").default_value.c_str();
     }
     else
     {
@@ -842,32 +841,32 @@ namespace stdr_parser
     if(indexes.size() == 0)
     {
       msg.a_ux_ux = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("a_ux_ux").default_value.c_str());
+        Validator::getSpecs("a_ux_ux").default_value.c_str());
       msg.a_ux_uy = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("a_ux_uy").default_value.c_str());
+        Validator::getSpecs("a_ux_uy").default_value.c_str());
       msg.a_ux_w = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("a_ux_w").default_value.c_str());
+        Validator::getSpecs("a_ux_w").default_value.c_str());
 
       msg.a_uy_ux = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("a_uy_ux").default_value.c_str());
+        Validator::getSpecs("a_uy_ux").default_value.c_str());
       msg.a_uy_uy = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("a_uy_uy").default_value.c_str());
+        Validator::getSpecs("a_uy_uy").default_value.c_str());
       msg.a_uy_w = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("a_uy_w").default_value.c_str());
+        Validator::getSpecs("a_uy_w").default_value.c_str());
 
       msg.a_w_ux = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("a_w_ux").default_value.c_str());
+        Validator::getSpecs("a_w_ux").default_value.c_str());
       msg.a_w_uy = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("a_w_uy").default_value.c_str());
+        Validator::getSpecs("a_w_uy").default_value.c_str());
       msg.a_w_w = stdr_parser::MessageCreator::stringToType<float>(
-       validator_.getSpecs("a_w_w").default_value.c_str());
+       Validator::getSpecs("a_w_w").default_value.c_str());
 
       msg.a_g_ux = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("a_g_ux").default_value.c_str());
+        Validator::getSpecs("a_g_ux").default_value.c_str());
       msg.a_g_uy = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("a_g_uy").default_value.c_str());
+        Validator::getSpecs("a_g_uy").default_value.c_str());
       msg.a_g_w = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("a_g_w").default_value.c_str());
+        Validator::getSpecs("a_g_w").default_value.c_str());
     }
     else
     {
@@ -943,11 +942,11 @@ namespace stdr_parser
     else
     {
       msg.initialPose.x = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("x").default_value.c_str());
+        Validator::getSpecs("x").default_value.c_str());
       msg.initialPose.y = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("y").default_value.c_str());
+        Validator::getSpecs("y").default_value.c_str());
       msg.initialPose.theta = stdr_parser::MessageCreator::stringToType<float>(
-       validator_.getSpecs("theta").default_value.c_str());
+       Validator::getSpecs("theta").default_value.c_str());
     }
     
     //!< Search for footprint
@@ -960,7 +959,7 @@ namespace stdr_parser
     else
     {
       msg.footprint.radius = stdr_parser::MessageCreator::stringToType<float>(
-        validator_.getSpecs("radius").default_value.c_str());
+        Validator::getSpecs("radius").default_value.c_str());
     }
     
     //!< Search for laser sensors

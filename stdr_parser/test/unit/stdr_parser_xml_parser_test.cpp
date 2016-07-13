@@ -36,21 +36,18 @@ class XmlParserTest : public ::testing::Test
 
   void SetUp()
   { 
-    std::string dump_file_ = ros::package::getPath("stdr_parser") +
-                    "/test/files/dump_file.txt"; 
    
- 
   }
   virtual void TearDown()
   {
     delete root_node_;
-    remove(dump_file_.c_str());
-    
+  
   }
 
   void init(const std::string& filename)
   {
     robot_file_ = ros::package::getPath("stdr_parser") +
+                   "/test/files/XmlParser/" +
                     filename;
 
     root_node_ = new Node();  //auta na pane sto setup?
@@ -79,13 +76,11 @@ class XmlParserTest : public ::testing::Test
   // Variables
   Node* root_node_;
   std::string robot_file_;
-  std::string dump_file_;
-
 };
 
 TEST_F(XmlParserTest, parseTestRobot1)
 {
-  init(std::string("/test/files/test_robot_1.xml"));
+  init(std::string("test_robot_1.xml"));
 
   // parse the test file
   EXPECT_NO_THROW(XmlParser::parse(robot_file_, root_node_));
@@ -95,14 +90,14 @@ TEST_F(XmlParserTest, parseTestRobot1)
 
 TEST_F(XmlParserTest, parseAlternateResourceLocation)
 {
-  init(std::string("/test/files/test_robot_2.xml"));
+  init(std::string("test_robot_2.xml"));
 
   // parse the correct test file
   EXPECT_NO_THROW(XmlParser::parse(robot_file_, root_node_));
 
 
   TearDown();
-  init(std::string("/test/files/test_robot_3.xml"));
+  init(std::string("test_robot_3.xml"));
 
   // parse the incorrect test file
   EXPECT_THROW(XmlParser::parse(robot_file_, root_node_), ParserException);
@@ -111,17 +106,18 @@ TEST_F(XmlParserTest, parseAlternateResourceLocation)
 
 TEST_F(XmlParserTest, parse)
 {
-    init(std::string("/test/files/test_robot_1.xml"));
+    init(std::string("test_robot_1.xml"));
     
     XmlParser::parse(robot_file_,root_node_);
 
     //get string by calling printParsedFile
     std::string indent="";
     std::ostringstream output_stream;
-    std::string tree = root_node_->printParsedFile(indent, output_stream);
+    root_node_->getTreeStructure(indent, output_stream);
+    std::string tree = output_stream.str();
 
     //read expected tree
-    init(std::string("/test/files/test_robot_1_tree.txt"));
+    init(std::string("test_robot_1_tree.txt"));
     std::string expected_tree = readFile(robot_file_);
     EXPECT_STREQ(expected_tree.c_str(), tree.c_str());
     
@@ -130,7 +126,7 @@ TEST_F(XmlParserTest, parse)
 
 TEST_F(XmlParserTest, parseLow)
 {
-    init(std::string("/test/files/test_robot_1.xml"));
+    init(std::string("test_robot_1.xml"));
     TiXmlDocument doc;
     doc.SetTabSize(2);
     doc.LoadFile(robot_file_.c_str());
@@ -143,10 +139,11 @@ TEST_F(XmlParserTest, parseLow)
     //get string by calling printParsedFile
     std::string indent="";
     std::ostringstream output_stream;
-    std::string tree = root_node_->printParsedFile(indent, output_stream);
+    root_node_->getTreeStructure(indent, output_stream);
+    std::string tree = output_stream.str();
 
     //read expected tree
-    init(std::string("/test/files/test_robot_1_tree.txt"));
+    init(std::string("test_robot_1_tree.txt"));
     std::string expected_tree = readFile(robot_file_);
     EXPECT_STREQ(expected_tree.c_str(), tree.c_str());
     

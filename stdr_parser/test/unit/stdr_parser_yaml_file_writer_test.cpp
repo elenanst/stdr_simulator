@@ -31,15 +31,18 @@ namespace stdr_parser
 
 class YamlFileWriterTest :  public XmlFileWriterTest
 {
-
-  
+protected:
+  void init(const std::string& filename)
+  {
+    utils_file_ = ros::package::getPath("stdr_parser") +
+                    "/test/files/YamlFileWriter/" +
+                    filename;
+  }
 
 };
 
 TEST_F(YamlFileWriterTest, messageToYamlElementNoise)
 {
-  init("/test/files/elements/element.yaml");
-
   //create message
   stdr_msgs::Noise msg;
   std::string values[] = {"1", "2", "0.2"};
@@ -48,24 +51,23 @@ TEST_F(YamlFileWriterTest, messageToYamlElementNoise)
   XmlFileWriterTest::createMessage(&msg, els);
 
   //convert message to xml element and write to file
+  initTempFile(".yaml"); 
   YAML::Emitter out;
   out << msg;
   std::ofstream sensorYamlFile;    
-  sensorYamlFile.open(utils_file_.c_str());
+  sensorYamlFile.open(temp_file_);
   sensorYamlFile << out.c_str();
   sensorYamlFile.close();
-  std::string element = readFile(utils_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected element
-  init("/test/files/elements/Noise_element_exp.yaml");
+  init("Noise_element_exp.yaml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(element.c_str(), expected_element.c_str());
 }
 
 TEST_F(YamlFileWriterTest, messageToYamlElementFootprint)
 {
-  init("/test/files/elements/element.yaml");
-
   //create message
   stdr_msgs::FootprintMsg msg;
   std::string values[] = {"12"};
@@ -80,27 +82,25 @@ TEST_F(YamlFileWriterTest, messageToYamlElementFootprint)
   components[2].values = val_3;
   els.components = components;
   els.num_components = 3;
-
-  //convert message to xml element and write to file
   XmlFileWriterTest::createMessage(&msg, els);
+  //convert message to xml element and write to file
+  initTempFile(".yaml"); 
   YAML::Emitter out;
   out << msg;
   std::ofstream sensorYamlFile;    
-  sensorYamlFile.open(utils_file_.c_str());
+  sensorYamlFile.open(temp_file_);
   sensorYamlFile << out.c_str();
   sensorYamlFile.close();
-  std::string element = readFile(utils_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected element
-  init("/test/files/elements/Footprint_element_exp.yaml");
+  init("Footprint_element_exp.yaml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }
 
 TEST_F(YamlFileWriterTest, messageToYamlElementPose2D)
 {
-  init("/test/files/elements/element.yaml");
-
   //create message
   geometry_msgs::Pose2D msg;
   std::string values[] = {"1", "2", "0.2"};
@@ -109,24 +109,23 @@ TEST_F(YamlFileWriterTest, messageToYamlElementPose2D)
   XmlFileWriterTest::createMessage(&msg, els);
 
   //convert message to xml element and write to file
+  initTempFile(".yaml"); 
   YAML::Emitter out;
   out << msg;
   std::ofstream sensorYamlFile;    
-  sensorYamlFile.open(utils_file_.c_str());
+  sensorYamlFile.open(temp_file_);
   sensorYamlFile << out.c_str();
   sensorYamlFile.close();
-  std::string element = readFile(utils_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected element
-  init("/test/files/elements/Pose2D_element_exp.yaml");
+  init("Pose2D_element_exp.yaml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }
 
 TEST_F(YamlFileWriterTest, messageToYamlElementLaserSensor)
 {
-  init("/test/files/elements/element.yaml");
-
   //create message
   stdr_msgs::LaserSensorMsg msg;
   std::string values[] = {"50", "20", "5", "2", "10", "25", "2"};
@@ -144,24 +143,23 @@ TEST_F(YamlFileWriterTest, messageToYamlElementLaserSensor)
   XmlFileWriterTest::createMessage(&msg, els);
 
   //convert message to xml element and write to file
+  initTempFile(".yaml"); 
   YAML::Emitter out;
   out << msg;
   std::ofstream sensorYamlFile;    
-  sensorYamlFile.open(utils_file_.c_str());
+  sensorYamlFile.open(temp_file_);
   sensorYamlFile << out.c_str();
   sensorYamlFile.close();
-  std::string element = readFile(utils_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected element
-  init("/test/files/elements/LaserSensor_element_exp.yaml");
+  init("LaserSensor_element_exp.yaml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(element.c_str(), expected_element.c_str());
 }
 
 TEST_F(YamlFileWriterTest, messageToYamlElementSonarSensor)
 { 
-  init("/test/files/elements/element.yaml");
-
   //create message
   stdr_msgs::SonarSensorMsg msg;
   std::string values[] = {"5", "2", "5", "2", "2"};
@@ -179,24 +177,23 @@ TEST_F(YamlFileWriterTest, messageToYamlElementSonarSensor)
   XmlFileWriterTest::createMessage(&msg, els);
 
   //convert message to xml element and write to file
+  initTempFile(".yaml"); 
   YAML::Emitter out;
   out << msg;
   std::ofstream sensorYamlFile;    
-  sensorYamlFile.open(utils_file_.c_str());
+  sensorYamlFile.open(temp_file_);
   sensorYamlFile << out.c_str();
   sensorYamlFile.close();
-  std::string element = readFile(utils_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected element
-  init("/test/files/elements/SonarSensor_element_exp.yaml");
+  init("SonarSensor_element_exp.yaml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }
 
 TEST_F(YamlFileWriterTest, messageToYamlElementRfidSensor)
 { 
-  init("/test/files/elements/element.yaml");
-
   //create message
   stdr_msgs::RfidSensorMsg msg;
   std::string values[] = {"5", "2", "5", "2", "2"};
@@ -209,24 +206,23 @@ TEST_F(YamlFileWriterTest, messageToYamlElementRfidSensor)
   XmlFileWriterTest::createMessage(&msg, els);
 
   //convert message to yaml element and write to file
+  initTempFile(".yaml"); 
   YAML::Emitter out;
   out << msg;
   std::ofstream sensorYamlFile;    
-  sensorYamlFile.open(utils_file_.c_str());
+  sensorYamlFile.open(temp_file_);
   sensorYamlFile << out.c_str();
   sensorYamlFile.close();
-  std::string element = readFile(utils_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected element
-  init("/test/files/elements/RfidSensor_element_exp.yaml");
+  init("RfidSensor_element_exp.yaml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }
 
 TEST_F(YamlFileWriterTest, messageToYamlElementCO2Sensor)
 { 
-  init("/test/files/elements/element.yaml");
-
   //create message
   stdr_msgs::CO2SensorMsg  msg;
   std::string values[] = {"5", "2", "5"};
@@ -239,24 +235,23 @@ TEST_F(YamlFileWriterTest, messageToYamlElementCO2Sensor)
   XmlFileWriterTest::createMessage(&msg, els);
 
   //convert message to yaml element and write to file
+  initTempFile(".yaml"); 
   YAML::Emitter out;
   out << msg;
   std::ofstream sensorYamlFile;    
-  sensorYamlFile.open(utils_file_.c_str());
+  sensorYamlFile.open(temp_file_);
   sensorYamlFile << out.c_str();
   sensorYamlFile.close();
-  std::string element = readFile(utils_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected element
-  init("/test/files/elements/CO2Sensor_element_exp.yaml");
+  init("CO2Sensor_element_exp.yaml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }
 
 TEST_F(YamlFileWriterTest, messageToYamlElementThermalSensor)
 { 
-  init("/test/files/elements/element.yaml");
-
   //create message
   stdr_msgs::ThermalSensorMsg  msg;
   std::string values[] = {"5", "2", "5","3"};
@@ -269,24 +264,23 @@ TEST_F(YamlFileWriterTest, messageToYamlElementThermalSensor)
   XmlFileWriterTest::createMessage(&msg, els);
 
   //convert message to yaml element and write to file
+  initTempFile(".yaml"); 
   YAML::Emitter out;
   out << msg;
   std::ofstream sensorYamlFile;    
-  sensorYamlFile.open(utils_file_.c_str());
+  sensorYamlFile.open(temp_file_);
   sensorYamlFile << out.c_str();
   sensorYamlFile.close();
-  std::string element = readFile(utils_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected element
-  init("/test/files/elements/ThermalSensor_element_exp.yaml");
+  init("ThermalSensor_element_exp.yaml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }
 
 TEST_F(YamlFileWriterTest, messageToYamlElementSoundSensor)
 { 
-  init("/test/files/elements/element.yaml");
-
   //create message
   stdr_msgs::SoundSensorMsg  msg;
   std::string values[] = {"5", "2", "5","3"};
@@ -299,24 +293,23 @@ TEST_F(YamlFileWriterTest, messageToYamlElementSoundSensor)
   XmlFileWriterTest::createMessage(&msg, els);
 
   //convert message to yaml element and write to file
+  initTempFile(".yaml"); 
   YAML::Emitter out;
   out << msg;
   std::ofstream sensorYamlFile;    
-  sensorYamlFile.open(utils_file_.c_str());
+  sensorYamlFile.open(temp_file_);
   sensorYamlFile << out.c_str();
   sensorYamlFile.close();
-  std::string element = readFile(utils_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected element
-  init("/test/files/elements/SoundSensor_element_exp.yaml");
+  init("SoundSensor_element_exp.yaml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }
 
 TEST_F(YamlFileWriterTest, messageToYamlElementKinematic)
 { 
-  init("/test/files/elements/element.yaml");
-
   //create message
   stdr_msgs::KinematicMsg  msg;
   std::string values[] = {"5", "2", "5","3","5", "2", "5","3","5", "2", "5","3","8"};
@@ -325,24 +318,23 @@ TEST_F(YamlFileWriterTest, messageToYamlElementKinematic)
   XmlFileWriterTest::createMessage(&msg, els);
 
   //convert message to yaml element and write to file
+  initTempFile(".yaml"); 
   YAML::Emitter out;
   out << msg;
   std::ofstream sensorYamlFile;    
-  sensorYamlFile.open(utils_file_.c_str());
+  sensorYamlFile.open(temp_file_);
   sensorYamlFile << out.c_str();
   sensorYamlFile.close();
-  std::string element = readFile(utils_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected element
-  init("/test/files/elements/Kinematic_element_exp.yaml");
+  init("Kinematic_element_exp.yaml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }
 
 TEST_F(YamlFileWriterTest, messageToYamlElementRobot)
 { 
-  init("/test/files/elements/element.yaml");
-
   //create message
   stdr_msgs::RobotMsg  msg;
   sub_elements els;
@@ -414,24 +406,23 @@ TEST_F(YamlFileWriterTest, messageToYamlElementRobot)
 
   //convert message to yaml element and write to file
   XmlFileWriterTest::createMessage(&msg, els);
+  initTempFile(".yaml"); 
   YAML::Emitter out;
   out << msg;
   std::ofstream sensorYamlFile;    
-  sensorYamlFile.open(utils_file_.c_str());
+  sensorYamlFile.open(temp_file_);
   sensorYamlFile << out.c_str();
   sensorYamlFile.close();
-  std::string element = readFile(utils_file_);
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected element
-  init("/test/files/elements/Robot_element_exp.yaml");
+  init("Robot_element_exp.yaml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }
 
 TEST_F(YamlFileWriterTest, messageToYamlFileNoise)
 {
-  init("/test/files/elements/element.yaml");
-
   //create message
   stdr_msgs::Noise msg;
   std::string values[] = {"1", "2", "0.2"};
@@ -440,11 +431,12 @@ TEST_F(YamlFileWriterTest, messageToYamlFileNoise)
   XmlFileWriterTest::createMessage(&msg, els);
 
   //convert message to yaml element and write to file
-  YamlFileWriter::messageToFile<>(msg, utils_file_);
-  std::string element = readFile(utils_file_);
+  initTempFile(".yaml"); 
+  YamlFileWriter::messageToFile<>(msg, std::string(temp_file_));
+  std::string element = readFile(std::string(temp_file_));
 
   //read expected element
-  init("/test/files/elements/Noise_element_exp.yaml");
+  init("Noise_element_exp.yaml");
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(expected_element.c_str(), element.c_str());
 }

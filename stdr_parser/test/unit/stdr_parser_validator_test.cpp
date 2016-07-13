@@ -50,13 +50,14 @@ class ValidatorTest : public ::testing::Test
   void init(const std::string& filename)
   {
     specs_file_ = ros::package::getPath("stdr_parser") +
+                  "/test/files/Validator/" +
                     filename;
     dummy_node_ = new Node();
   }
 
   TiXmlDocument loadStdrSpecifications(void)
   {
-    init(std::string("/test/files/stdr_specifications.xml"));
+    init(std::string("stdr_specifications.xml"));
     std::string path = extractDirname(specs_file_);
     TiXmlDocument test_doc;
     bool loadOkay = test_doc.LoadFile(specs_file_.c_str());
@@ -73,6 +74,7 @@ class ValidatorTest : public ::testing::Test
   std::string readFile(const std::string& filename)
   {
      std::string file = ros::package::getPath("stdr_parser") +
+                      "/test/files/Validator/" +
                     filename;
      std::ifstream ifs(file.c_str());
      std::string content( (std::istreambuf_iterator<char>(ifs) ),
@@ -128,7 +130,7 @@ class ValidatorTest : public ::testing::Test
 
 TEST_F(ValidatorTest, parseMergableSpecificationsNoThrow)
 {
-  init(std::string("/test/files/stdr_multiple_allowed.xml"));
+  init(std::string("stdr_multiple_allowed.xml"));
 
   //parse stdr_multiple_allowed.xml
   EXPECT_NO_THROW(validator_.parseMergableSpecifications(specs_file_));
@@ -139,7 +141,7 @@ TEST_F(ValidatorTest, parseMergableSpecificationsNoThrow)
 
 TEST_F(ValidatorTest, parseMergableSpecificationsRightTags)
 {
-  init(std::string("/test/files/stdr_multiple_allowed.xml"));
+  init(std::string("stdr_multiple_allowed.xml"));
 
   //parse stdr_multiple_allowed.xml to get non_mergable_tags
   std::set<std::string> non_mergable_tags = validator_.parseMergableSpecifications(specs_file_);
@@ -174,7 +176,7 @@ TEST_F(ValidatorTest,parseSpecificationsRightSpecs)
   std::string specs = mapToString(specs_map);
 
   //load expected string
-  std::string expected = readFile(std::string("/test/files/specifications.txt"));
+  std::string expected = readFile("specifications.txt");
   EXPECT_STREQ(expected.c_str(), specs.c_str());
 }
 
@@ -264,7 +266,7 @@ TEST_F(ValidatorTest,validityRequiredCheckValueNoThrow)
 
 TEST_F(ValidatorTest,validityRequiredCheckTagNoThrow)
 {
-  init(std::string("/test/files/stdr_specifications.xml"));
+  init(std::string("stdr_specifications.xml"));
   TiXmlDocument test_doc = loadStdrSpecifications();
   EXPECT_NO_THROW(parseSpecifications(&test_doc));
   dummy_node_ = new Node();
