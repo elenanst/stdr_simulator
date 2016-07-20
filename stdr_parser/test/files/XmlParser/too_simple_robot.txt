@@ -1,0 +1,11 @@
+-STDR_Parser_Root_Node'  (0) - 1too_simple_robot.xml
+| -robot'  (0) - 2too_simple_robot.xml
+| | -robot_specifications'  (0) - 3too_simple_robot.xml
+| | | -initial_pose'  (0) - 6too_simple_robot.xml
+| | | | -x'  (0) - 4too_simple_robot.xml
+| | | | | -0'  (0) - 4too_simple_robot.xml
+| | | | -y'  (0) - 5too_simple_robot.xml
+| | | | | -0'  (0) - 5too_simple_robot.xml
+| | | | -theta'  (0) - 6too_simple_robot.xml
+| | | | | -0'  (0) - 6too_simple_robot.xml
+

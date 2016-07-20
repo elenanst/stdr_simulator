@@ -32,6 +32,7 @@ namespace stdr_parser
 class YamlFileWriterTest :  public XmlFileWriterTest
 {
 protected:
+
   void init(const std::string& filename)
   {
     utils_file_ = ros::package::getPath("stdr_parser") +

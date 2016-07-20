@@ -36,16 +36,10 @@ class ParserTest : public XmlFileWriterTest
   {
   }
 
-  void SetUp()
-  { 
- 
-  }
   virtual void TearDown()
   {
-
     validator_.clearSpecs();
-    delete root_node_;
-    
+    delete root_node_;   
   }
 
   void init(const std::string& filename)
@@ -102,6 +96,7 @@ class ParserTest : public XmlFileWriterTest
   {
      Parser::mergeNodesValues(n);
   }
+
   // Variables
   Node* root_node_;
   std::string utils_file_;
@@ -124,13 +119,10 @@ TEST_F(ParserTest, parseNoThrowYaml)
   init(std::string("khepera3.yaml"));
   // parse the test file
   EXPECT_NO_THROW(parse(utils_file_));
-
 }
 
 TEST_F(ParserTest, saveMessageXml)
 {
-
-  
   //create message
   stdr_msgs::Noise msg;
   std::string values[] = {"1", "2", "5"};
@@ -147,12 +139,10 @@ TEST_F(ParserTest, saveMessageXml)
   //read expected element
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(expected_element.c_str(), element.c_str());
-
 }
 
 TEST_F(ParserTest, saveMessageYaml)
 {
-  
   //create message
   stdr_msgs::Noise msg;
   std::string values[] = {"1", "2", "0.2"};
@@ -169,7 +159,6 @@ TEST_F(ParserTest, saveMessageYaml)
   //read expected element
   std::string expected_element = readFile(utils_file_);
   EXPECT_STREQ(expected_element.c_str(), element.c_str());
-
 }
 
 TEST_F(ParserTest, eliminateFilenamesNoThrow)
@@ -277,7 +266,8 @@ TEST_F(ParserTest, createMessageNoThrow)
   stdr_msgs::RobotMsg msg;
 
   //create a mesage from file
-  EXPECT_NO_THROW( msg = Parser::createMessage<stdr_msgs::RobotMsg>(utils_file_)); 
+  EXPECT_NO_THROW( msg =
+    Parser::createMessage<stdr_msgs::RobotMsg>(utils_file_)); 
 }
 
 TEST_F(ParserTest, createMessageRobot)
@@ -285,7 +275,8 @@ TEST_F(ParserTest, createMessageRobot)
   init(std::string("test_robot_1.xml"));
   
   //create a mesage from file
-  stdr_msgs::RobotMsg msg = Parser::createMessage<stdr_msgs::RobotMsg>(utils_file_);
+  stdr_msgs::RobotMsg msg =
+   Parser::createMessage<stdr_msgs::RobotMsg>(utils_file_);
   
 
   //get expected message

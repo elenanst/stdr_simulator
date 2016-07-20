@@ -49,11 +49,7 @@ public:
   {
   }
 
-  virtual void TearDown()
-  {
-    
-  }
-
+  //initialize temporary file
   void initTempFile(const std::string& type)
   {
    std::string filename = "/tmp/tmpfileXXXXXX" + type;
@@ -65,7 +61,7 @@ public:
   {
     utils_file_ = ros::package::getPath("stdr_parser") +
                     "/test/files/XmlFileWriter/" +
-                    filename;
+                   filename;
   }
 
   template <class T>
@@ -249,7 +245,8 @@ const sub_elements els)
 }
 
 template <>
-void XmlFileWriterTest::createMessage<stdr_msgs::RobotMsg>(stdr_msgs::RobotMsg*  msg, const sub_elements els)
+void XmlFileWriterTest::createMessage<stdr_msgs::RobotMsg>(stdr_msgs::RobotMsg*  msg,
+                                                            const sub_elements els)
 {
 
   for (unsigned int i = 0 ; i < els.num_components ; i++)

@@ -34,10 +34,6 @@ class XmlParserTest : public ::testing::Test
   {
   }
 
-  void SetUp()
-  { 
-   
-  }
   virtual void TearDown()
   {
     delete root_node_;
@@ -62,7 +58,8 @@ class XmlParserTest : public ::testing::Test
     while( getline(inFile, line) ) {
         output_stream << line << std::endl;
     } 
-    std::string content = output_stream.str().substr(0, output_stream.str().size()-1);
+    std::string content = output_stream.str().substr(0,
+      output_stream.str().size()-1);
     return content;
 
   }
@@ -106,7 +103,7 @@ TEST_F(XmlParserTest, parseAlternateResourceLocation)
 
 TEST_F(XmlParserTest, parse)
 {
-    init(std::string("test_robot_1.xml"));
+    init(std::string("too_simple_robot.xml"));
     
     XmlParser::parse(robot_file_,root_node_);
 
@@ -117,7 +114,7 @@ TEST_F(XmlParserTest, parse)
     std::string tree = output_stream.str();
 
     //read expected tree
-    init(std::string("test_robot_1_tree.txt"));
+    init(std::string("too_simple_robot.txt"));
     std::string expected_tree = readFile(robot_file_);
     EXPECT_STREQ(expected_tree.c_str(), tree.c_str());
     
@@ -126,7 +123,7 @@ TEST_F(XmlParserTest, parse)
 
 TEST_F(XmlParserTest, parseLow)
 {
-    init(std::string("test_robot_1.xml"));
+    init(std::string("too_simple_robot.xml"));
     TiXmlDocument doc;
     doc.SetTabSize(2);
     doc.LoadFile(robot_file_.c_str());
@@ -143,7 +140,7 @@ TEST_F(XmlParserTest, parseLow)
     std::string tree = output_stream.str();
 
     //read expected tree
-    init(std::string("test_robot_1_tree.txt"));
+    init(std::string("too_simple_robot.txt"));
     std::string expected_tree = readFile(robot_file_);
     EXPECT_STREQ(expected_tree.c_str(), tree.c_str());
     

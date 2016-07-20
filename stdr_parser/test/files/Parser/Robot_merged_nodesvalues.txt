@@ -1,0 +1,16 @@
+-'  (0) - 1Robot_merge_nodesvalues.xml
+| -robot'  (0) - 2Robot_merge_nodesvalues.xml
+| | -robot_specifications'  (0) - 8Robot_merge_nodesvalues.xml
+| | | -initial_pose'  (0) - 6Robot_merge_nodesvalues.xml
+| | | | -x'  (0) - 4Robot_merge_nodesvalues.xml
+| | | | | -0'  (0) - 4Robot_merge_nodesvalues.xml
+| | | | -y'  (0) - 5Robot_merge_nodesvalues.xml
+| | | | | -0'  (0) - 5Robot_merge_nodesvalues.xml
+| | | | -theta'  (0) - 6Robot_merge_nodesvalues.xml
+| | | | | -0'  (0) - 6Robot_merge_nodesvalues.xml
+| | | -laser'  (0) - 9Robot_merge_nodesvalues.xml
+| | | | -laser_specifications'  (0) - 10Robot_merge_nodesvalues.xml
+| | | | | -pose'  (0) - 11Robot_merge_nodesvalues.xml
+| | | | | | -theta'  (0) - 11Robot_merge_nodesvalues.xml
+| | | | | | | --3.1415 4.57'  (0) - 11Robot_merge_nodesvalues.xml
+

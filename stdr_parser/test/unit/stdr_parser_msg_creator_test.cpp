@@ -57,6 +57,7 @@ class MsgCreatorTest : public ::testing::Test
     id_ = 0;
   }
 
+  //initialize temporary file
   void initTempFile(const std::string& type)
   {
    std::string filename = "/tmp/tmpfileXXXXXX" + type;
@@ -92,7 +93,8 @@ TEST_F(MsgCreatorTest, createMessageNoise)
   XmlParser::parse(utils_file_, root_node_);
 
   //create message from Node
-  stdr_msgs::Noise msg = MessageCreator::createMessage<stdr_msgs::Noise>(root_node_, id_);
+  stdr_msgs::Noise msg =
+   MessageCreator::createMessage<stdr_msgs::Noise>(root_node_, id_);
 
   //write message to file and read into string
   initTempFile(".xml");
@@ -112,7 +114,8 @@ TEST_F(MsgCreatorTest, createMessageFootprint)
   XmlParser::parse(utils_file_, root_node_);
 
   //create message from Node
-  stdr_msgs::FootprintMsg msg = MessageCreator::createMessage<stdr_msgs::FootprintMsg>(root_node_, id_);
+  stdr_msgs::FootprintMsg msg =
+   MessageCreator::createMessage<stdr_msgs::FootprintMsg>(root_node_, id_);
 
   //write message to file and read into string
   initTempFile(".xml");
@@ -132,7 +135,8 @@ TEST_F(MsgCreatorTest, createMessageLaserSensor)
   XmlParser::parse(utils_file_, root_node_);
 
   //create message from Node
-  stdr_msgs::LaserSensorMsg msg = MessageCreator::createMessage<stdr_msgs::LaserSensorMsg>(root_node_, id_);
+  stdr_msgs::LaserSensorMsg msg =
+   MessageCreator::createMessage<stdr_msgs::LaserSensorMsg>(root_node_, id_);
 
   //write message to file and read into string
   initTempFile(".xml");
@@ -152,7 +156,8 @@ TEST_F(MsgCreatorTest, createMessageSonarSensor)
   XmlParser::parse(utils_file_, root_node_);
 
   //create message from Node
-  stdr_msgs::SonarSensorMsg msg = MessageCreator::createMessage<stdr_msgs::SonarSensorMsg>(root_node_, id_);
+  stdr_msgs::SonarSensorMsg msg =
+   MessageCreator::createMessage<stdr_msgs::SonarSensorMsg>(root_node_, id_);
 
   //write message to file and read into string
   initTempFile(".xml");
@@ -173,7 +178,8 @@ TEST_F(MsgCreatorTest, createMessageRfidSensor)
   XmlParser::parse(utils_file_, root_node_);
 
   //create message from Node
-  stdr_msgs::RfidSensorMsg msg = MessageCreator::createMessage<stdr_msgs::RfidSensorMsg>(root_node_, id_);
+  stdr_msgs::RfidSensorMsg msg =
+   MessageCreator::createMessage<stdr_msgs::RfidSensorMsg>(root_node_, id_);
 
   //write message to file and read into string
   initTempFile(".xml");
@@ -193,7 +199,8 @@ TEST_F(MsgCreatorTest, createMessageCO2Sensor)
   XmlParser::parse(utils_file_, root_node_);
 
   //create message from Node
-  stdr_msgs::CO2SensorMsg msg = MessageCreator::createMessage<stdr_msgs::CO2SensorMsg>(root_node_, id_);
+  stdr_msgs::CO2SensorMsg msg =
+   MessageCreator::createMessage<stdr_msgs::CO2SensorMsg>(root_node_, id_);
 
   //write message to file and read into string
   initTempFile(".xml");
@@ -213,7 +220,8 @@ TEST_F(MsgCreatorTest, createMessageThermalSensor)
   XmlParser::parse(utils_file_, root_node_);
 
   //create message from Node
-  stdr_msgs::ThermalSensorMsg msg = MessageCreator::createMessage<stdr_msgs::ThermalSensorMsg>(root_node_, id_);
+  stdr_msgs::ThermalSensorMsg msg =
+   MessageCreator::createMessage<stdr_msgs::ThermalSensorMsg>(root_node_, id_);
 
   //write message to file and read into string
   initTempFile(".xml");
@@ -233,7 +241,8 @@ TEST_F(MsgCreatorTest, createMessageSoundSensor)
   XmlParser::parse(utils_file_, root_node_);
 
   //create message from Node
-  stdr_msgs::SoundSensorMsg msg = MessageCreator::createMessage<stdr_msgs::SoundSensorMsg>(root_node_, id_);
+  stdr_msgs::SoundSensorMsg msg = 
+    MessageCreator::createMessage<stdr_msgs::SoundSensorMsg>(root_node_, id_);
 
   //write message to file and read into string
   initTempFile(".xml");
@@ -253,7 +262,8 @@ TEST_F(MsgCreatorTest, createMessageKinematic)
   XmlParser::parse(utils_file_, root_node_);
 
   //create message from Node
-  stdr_msgs::KinematicMsg msg = MessageCreator::createMessage<stdr_msgs::KinematicMsg>(root_node_, id_);
+  stdr_msgs::KinematicMsg msg =
+     MessageCreator::createMessage<stdr_msgs::KinematicMsg>(root_node_, id_);
 
   //write message to file and read into string
   initTempFile(".xml");
@@ -273,7 +283,8 @@ TEST_F(MsgCreatorTest, createMessageRobot)
   XmlParser::parse(utils_file_, root_node_);
 
   //create message from Node
-  stdr_msgs::RobotMsg msg = MessageCreator::createMessage<stdr_msgs::RobotMsg>(root_node_, id_);
+  stdr_msgs::RobotMsg msg =
+     MessageCreator::createMessage<stdr_msgs::RobotMsg>(root_node_, id_);
 
   //write message to file and read into string
   initTempFile(".xml");
@@ -297,7 +308,8 @@ TEST_F(MsgCreatorTest, createMessagePose2D)
   indexes = root_node_->getTag("pose");
 
   //create message from Node
-  geometry_msgs::Pose2D msg = MessageCreator::createMessage<geometry_msgs::Pose2D>(root_node_->elements[indexes[0]], id_);
+  geometry_msgs::Pose2D msg =
+    MessageCreator::createMessage<geometry_msgs::Pose2D>(root_node_->elements[indexes[0]], id_);
 
   //write message to file and read into string
   initTempFile(".xml");
@@ -321,7 +333,8 @@ TEST_F(MsgCreatorTest, createMessagePoint)
   indexes = root_node_->getTag("point");
 
   //create message from Node
-  geometry_msgs::Point msg = MessageCreator::createMessage<geometry_msgs::Point>(root_node_->elements[indexes[0]], id_);
+  geometry_msgs::Point msg =
+   MessageCreator::createMessage<geometry_msgs::Point>(root_node_->elements[indexes[0]], id_);
 
 
   //write message to file and read into string

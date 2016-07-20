@@ -55,6 +55,7 @@ class ValidatorTest : public ::testing::Test
     dummy_node_ = new Node();
   }
 
+  //load specifications 
   TiXmlDocument loadStdrSpecifications(void)
   {
     init(std::string("stdr_specifications.xml"));
@@ -71,6 +72,7 @@ class ValidatorTest : public ::testing::Test
     return test_doc;
   }
    
+  //read file into strin
   std::string readFile(const std::string& filename)
   {
      std::string file = ros::package::getPath("stdr_parser") +
@@ -93,11 +95,9 @@ class ValidatorTest : public ::testing::Test
       std::string name = it->first;
       ElSpecs elspecs = it->second;
       output_stream << name  << elspecs;
-
     }
 
     return output_stream.str().c_str();
-
   }
 
 
@@ -147,7 +147,9 @@ TEST_F(ValidatorTest, parseMergableSpecificationsRightTags)
   std::set<std::string> non_mergable_tags = validator_.parseMergableSpecifications(specs_file_);
 
   //fill non_mergable_tags_test as defined in stdr_multiple_allowed.xml
-  std::string tags[] = {"robot","laser","sonar","rfid_reader","point","co2_sensor","thermal_sensor","sound_sensor"};
+  std::string tags[] =
+   {"robot","laser","sonar","rfid_reader","point",
+     "co2_sensor","thermal_sensor","sound_sensor"};
   std::set<std::string> expected(tags, tags + sizeof(tags) / sizeof(tags[0]));
   
 
@@ -271,7 +273,8 @@ TEST_F(ValidatorTest,validityRequiredCheckTagNoThrow)
   EXPECT_NO_THROW(parseSpecifications(&test_doc));
   dummy_node_ = new Node();
   dummy_node_->tag = "kinematic_parameters";
-  std::string tags[] = {"a_ux_ux","a_ux_uy","a_ux_w","a_uy_ux","a_uy_uy","a_uy_w","a_w_ux","a_w_uy","a_w_w","a_g_ux","a_g_uy","a_g_w"};
+  std::string tags[] = {"a_ux_ux","a_ux_uy","a_ux_w","a_uy_ux",
+    "a_uy_uy","a_uy_w","a_w_ux","a_w_uy","a_w_w","a_g_ux","a_g_uy","a_g_w"};
   std::set<std::string> tags_set(tags, tags + sizeof(tags) / sizeof(tags[0]));
   for(std::set<std::string>::const_iterator it = tags_set.begin(); it != tags_set.end(); ++it)
   {

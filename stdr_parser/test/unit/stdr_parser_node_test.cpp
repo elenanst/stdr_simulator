@@ -144,7 +144,8 @@ TEST_F(ParserNodeTest, getTagRightTag)
   XmlParser::parse(utils_file_, root_node_);
 
   //get indexes of tag "laser_specifications" 
-  std::vector<int> indexes = root_node_->elements[0]->getTag("laser_specifications");
+  std::vector<int> indexes =
+   root_node_->elements[0]->getTag("laser_specifications");
 
   //check if number of indexes is correct
   EXPECT_EQ(indexes.size(),1);
@@ -161,7 +162,8 @@ TEST_F(ParserNodeTest, getTagMultipleOccurence)
   XmlParser::parse(utils_file_, root_node_);
 
   //get indexes of tag "max_angle" 
-  std::vector<int> indexes = root_node_->elements[0]->elements[0]->getTag("max_angle");
+  std::vector<int> indexes =
+   root_node_->elements[0]->elements[0]->getTag("max_angle");
 
   //check if number of indexes is correct
   EXPECT_EQ(indexes.size(),2);
@@ -179,7 +181,8 @@ TEST_F(ParserNodeTest, getTagEmpty)
   XmlParser::parse(utils_file_, root_node_);
 
   //get indexes of tag "max_angle" 
-  std::vector<int> indexes = root_node_->elements[0]->getTag("theta");
+  std::vector<int> indexes =
+   root_node_->elements[0]->getTag("theta");
 
   //check if number of indexes is correct
   EXPECT_EQ(indexes.size(),0);
@@ -211,7 +214,7 @@ TEST_F(ParserNodeTest,checkForFilenameTrue)
   std::string filename = "robot" ;
 
   //check if element has tag robot
-  EXPECT_TRUE(root_node_->elements[0]->elements[0]->checkForFilename(filename));
+  EXPECT_TRUE(root_node_->checkForFilename(filename));
 }
 
 }

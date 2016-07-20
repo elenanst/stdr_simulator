@@ -1,0 +1,1 @@
+rfid_reader:  rfid_reader_specifications:    angle_span: 2    max_range: 5    signal_cutoff: 5    frequency: 2    frame_id: 2    pose:      x: 10      y: 2      theta: 37

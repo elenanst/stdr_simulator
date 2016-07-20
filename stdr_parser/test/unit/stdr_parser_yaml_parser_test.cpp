@@ -40,15 +40,10 @@ class YamlParserTest : public ::testing::Test
   {
   }
 
-  void SetUp()
-  { 
-     
-  }
   virtual void TearDown()
   {
     delete root_node_;
     remove(dump_file_.c_str());
-    
   }
 
   void init(const std::string& filename)
@@ -94,8 +89,8 @@ class YamlParserTest : public ::testing::Test
     } 
     std::string content = output_stream.str().substr(0, output_stream.str().size()-1);
     return content;
-
   }
+
   // Accessors for private methods of XmlParser
   void parseLow(const YAML::Node& node, Node* n)
   {
@@ -130,7 +125,8 @@ class YamlParserTest : public ::testing::Test
        if(elements[i]->tag != "")
        {
         
-         pos = find(expected_tags.begin(), expected_tags.end(), elements[i]->tag) - expected_tags.begin();
+         pos = find(expected_tags.begin(), expected_tags.end(),
+                elements[i]->tag) - expected_tags.begin();
          if(pos >= expected_tags.size())
          {
            *result = *result && false;
@@ -142,7 +138,8 @@ class YamlParserTest : public ::testing::Test
        }
        else
        {
-         pos = find(expected_values.begin(), expected_values.end(), elements[i]->value) - expected_values.begin();
+         pos = find(expected_values.begin(), expected_values.end(),
+                 elements[i]->value) - expected_values.begin();
          if(pos >= expected_values.size())
          {
            *result = *result && false;
@@ -225,7 +222,8 @@ TEST_F(YamlParserTest, parseLow)
     std::ifstream fin(path.c_str());
     
     if (!fin.good()) {
-      throw ParserException("Failed to load '"+ robot_file_ +"', no such file!");
+      throw ParserException("Failed to load '"+ robot_file_ +
+          "', no such file!");
     }
 
 #ifdef HAVE_NEW_YAMLCPP
